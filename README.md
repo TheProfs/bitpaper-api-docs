@@ -25,7 +25,15 @@ bundle exec middleman server
 ## Deploy to production
 
 ```bash
+# Build docs
 ./deploy.sh
+# push to production:
+$ git add --all
+$ git commit -am"Added POST/ user"
+$ git push origin main
 ```
+
+The app is deployed on Heroku as [bitpaper-api-docs])
+(https://dashboard.heroku.com/apps/bitpaper-api-docs)
 
 [slate]: https://github.com/slatedocs/slate
