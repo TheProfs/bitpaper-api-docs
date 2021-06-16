@@ -1,6 +1,6 @@
 # Bitpaper API Docs
 
-Bitpaper's public API docs
+Bitpaper's public API docs, build using [Slate][slate].
 
 ## Install
 
@@ -14,7 +14,7 @@ $ bundle install
 
 ## Usage
 
-Simply edit `src/index.html.md`.
+Simply edit `src/index.html.md`. More info on [Slate's][slate] homepage.
 
 ## Run server
 
@@ -27,3 +27,5 @@ bundle exec middleman server
 ```bash
 ./deploy.sh
 ```
+
+[slate]: https://github.com/slatedocs/slate
