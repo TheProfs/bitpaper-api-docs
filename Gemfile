@@ -12,3 +12,5 @@ gem 'nokogiri', '~> 1.11.0'
 gem 'sass'
 gem 'webrick'
 gem "rack-contrib", "~> 2.3"
+
+gem "puma", "~> 5.3"
