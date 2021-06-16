@@ -32,7 +32,7 @@ More info on [Slate's][slate] homepage.
 # Build docs
 ./deploy.sh
 
-# push to main branch:
+# Push to main branch:
 $ git add --all
 $ git commit -am"Added POST/ user"
 $ git push origin main
