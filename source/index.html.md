@@ -143,7 +143,7 @@ third-party whiteboard.
 
 ```html
 <!--
-  Assuming this is embedded in your site on URL:
+  Embed this in your site on URL:
   https://whiteboard.yourdomain.com/maths/sHKrJLF7h
  -->
 <iframe
