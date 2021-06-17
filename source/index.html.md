@@ -52,6 +52,18 @@ API key, found in My Account.
 
 # Papers
 
+Papers are the primary resource in Bitpaper. They represent a collaborative
+whiteboard instance accessible via a permanent URL.
+
+Each paper in Bitpaper has 100 pages.
+
+Creating a paper will give you a permanent URL which you can simply visit to
+launch the whiteboard instance. This URL can be shared with others to
+collaborate on the whiteboard.
+
+Papers are uniquely identified by their `id_session` which is the last
+part of the returned URL.
+
 ## Create a Paper
 
 ```shell

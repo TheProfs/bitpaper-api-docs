@@ -300,7 +300,7 @@
       </span>
     </a>
     <div class="toc-wrapper">
-      <img src="images/logo-22aa55c6.png" class="logo" alt="" />
+      <img src="images/logo-bbe8927d.svg" class="logo" alt="" />
         <div class="search">
           <input type="text" class="search" id="input-search" placeholder="Search">
         </div>
@@ -372,7 +372,19 @@ server in a header that looks like the following:</p>
 You must replace <code>my-super-secret-api-token</code> with your personal
 API key, found in My Account.
 </aside>
-<h1 id='papers'>Papers</h1><h2 id='create-a-paper'>Create a Paper</h2><div class="highlight"><pre class="highlight shell tab-shell"><code>curl <span class="s2">"https://api.bitpaper.io/api/v1/paper/maths"</span> <span class="se">\</span>
+<h1 id='papers'>Papers</h1>
+<p>Papers are the primary resource in Bitpaper. They represent a collaborative
+whiteboard instance accessible via a permanent URL.</p>
+
+<p>Each paper in Bitpaper has 100 pages.</p>
+
+<p>Creating a paper will give you a permanent URL which you can simply visit to
+launch the whiteboard instance. This URL can be shared with others to
+collaborate on the whiteboard.</p>
+
+<p>Papers are uniquely identified by their <code>id_session</code> which is the last
+part of the returned URL.</p>
+<h2 id='create-a-paper'>Create a Paper</h2><div class="highlight"><pre class="highlight shell tab-shell"><code>curl <span class="s2">"https://api.bitpaper.io/api/v1/paper/maths"</span> <span class="se">\</span>
 <span class="nt">--data</span> <span class="s2">"can_create_call=true"</span> <span class="se">\</span>
 <span class="nt">-X</span> POST <span class="se">\</span>
 <span class="nt">-H</span> <span class="s2">"Authorization: my-super-secret-api-token"</span>
