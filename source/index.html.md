@@ -97,7 +97,7 @@ curl "https://api.bitpaper.io/api/v1/paper/maths" \
 -X POST \
 -H "Content-Type: application/json" \
 -H "Authorization: my-super-secret-api-token" \
---data '{"can_create_call":true }'
+--data '{"can_create_call":true}'
 ```
 
 > Returns JSON structured like this:
