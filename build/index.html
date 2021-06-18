@@ -367,6 +367,14 @@ authentication, and verbs.</p>
 <li>Requests which require a request body use JSON as the request body format,
 therefore they <em>must</em> include a <code>Content-Type: application/json</code> header.</li>
 </ul>
+<h3 id='rate-limiting'>Rate Limiting</h3>
+<p>The Bitpaper API employs a rate limiter to guard against bursts of incoming
+traffic in order to maximise its stability. Users who send many requests in
+quick succession may see error responses that show up as status code <code>429</code>.
+All requests to the Bitpaper API are limited to 1800 requests per hour.</p>
+
+<p><a href='https://bitpaper.io/contact'>Contact us</a> if you need to increase
+this limit.</p>
 <h1 id='authentication'>Authentication</h1><div class="highlight"><pre class="highlight shell tab-shell"><code><span class="c"># An example of an authorized API call</span>
 curl <span class="s2">"api_endpoint_here"</span> <span class="se">\</span>
   <span class="nt">-H</span> <span class="s2">"Authorization: my-super-secret-api-token"</span>
