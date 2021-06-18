@@ -162,13 +162,13 @@ is made permanently inaccessible.
 
 ### HTTP Request
 
-`DELETE https://api.bitpaper.io/api/v1/paper/<ID>`
+`DELETE https://api.bitpaper.io/api/v1/paper/<id_session>`
 
 ### URL Parameters
 
 Parameter | Description
 --------- | -----------
-ID | String: The `id_session` of the paper to delete
+id_session | String: The `id_session` of the paper to delete
 
 # Whitelabelling
 
