@@ -128,13 +128,25 @@ the created paper.
 
 Parameter | Type | Description
 --------- | ---- | -----------
-name | String (URL-safe, between 6-64 chars) | A name for the paper. Does not have to be unique.
+name | String: (URL-safe, between 4-64 chars) | A name for the paper. Does not have to be unique.
 
 ### Body Parameters
 
 Parameter | Description
 --------- | -----------
 can_create_call | Boolean: Whether this paper should allow audio/video calls
+
+### Response
+
+Responds with `HTTP 200` if successful.
+
+Parameter | Description
+--------- | -----------
+id_session | String: (URL-safe, between 8-64 chars)
+name       | String: (URL-safe, between 4-64 chars)
+created_at | String: Datetime of paper creation
+permissions| Object: Contains permission properties
+permissions.can_create_call| Boolean: Whether calls are allowed
 
 <aside class="notice">
 An <code>id_session</code> is a randomly-generated, unique and permanent
@@ -169,6 +181,10 @@ is made permanently inaccessible.
 Parameter | Description
 --------- | -----------
 id_session | String: The `id_session` of the paper to delete
+
+### Response
+
+Responds with `HTTP 204` if successful.
 
 # Whitelabelling
 

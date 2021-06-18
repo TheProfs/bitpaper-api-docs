@@ -449,7 +449,7 @@ the created paper.</p>
 </thead><tbody>
 <tr>
 <td>name</td>
-<td>String (URL-safe, between 6-64 chars)</td>
+<td>String: (URL-safe, between 4-64 chars)</td>
 <td>A name for the paper. Does not have to be unique.</td>
 </tr>
 </tbody></table>
@@ -463,6 +463,36 @@ the created paper.</p>
 <tr>
 <td>can_create_call</td>
 <td>Boolean: Whether this paper should allow audio/video calls</td>
+</tr>
+</tbody></table>
+<h3 id='response'>Response</h3>
+<p>Responds with <code>HTTP 200</code> if successful.</p>
+
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>id_session</td>
+<td>String: (URL-safe, between 8-64 chars)</td>
+</tr>
+<tr>
+<td>name</td>
+<td>String: (URL-safe, between 4-64 chars)</td>
+</tr>
+<tr>
+<td>created_at</td>
+<td>String: Datetime of paper creation</td>
+</tr>
+<tr>
+<td>permissions</td>
+<td>Object: Contains permission properties</td>
+</tr>
+<tr>
+<td>permissions.can_create_call</td>
+<td>Boolean: Whether calls are allowed</td>
 </tr>
 </tbody></table>
 
@@ -500,6 +530,8 @@ is made permanently inaccessible.</p>
 <td>String: The <code>id_session</code> of the paper to delete</td>
 </tr>
 </tbody></table>
+<h3 id='response-2'>Response</h3>
+<p>Responds with <code>HTTP 204</code> if successful.</p>
 <h1 id='whitelabelling'>Whitelabelling</h1>
 <p>Bitpaper allows embedding the whiteboard in your website, under your own domain
 and  without any reference to the Bitpaper brand.</p>
