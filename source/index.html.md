@@ -68,9 +68,10 @@ part of the returned URL.
 
 ```shell
 curl "https://api.bitpaper.io/api/v1/paper/maths" \
---data "can_create_call=true" \
 -X POST \
--H "Authorization: my-super-secret-api-token"
+-H "Content-Type: application/json" \
+-H "Authorization: my-super-secret-api-token" \
+--data '{"can_create_call":true }'
 ```
 
 > The above command returns JSON structured like this:
@@ -99,9 +100,9 @@ the created paper.
 
 ### URL Parameters
 
-Parameter | Description
---------- | -----------
-name | String: The name of the paper to create. Does not have to be unique.
+Parameter | Type | Description
+--------- | ---- | -----------
+name | String (URL-safe, between 6-64 chars) | A name for the paper. Does not have to be unique.
 
 ### Body Parameters
 
@@ -141,7 +142,7 @@ is made permanently inaccessible.
 
 Parameter | Description
 --------- | -----------
-ID | String: The ID of the paper to delete
+ID | String: The `id_session` of the paper to delete
 
 # Whitelabelling
 
