@@ -100,7 +100,7 @@ curl "https://api.bitpaper.io/api/v1/paper/maths" \
 --data '{"can_create_call":true }'
 ```
 
-> The above command returns JSON structured like this:
+> Returns JSON structured like this:
 
 ```json
 {
@@ -154,7 +154,7 @@ curl "https://api.bitpaper.io/api/v1/paper/sHKrJLF7h" \
   -H "Authorization: my-super-secret-api-token"
 ```
 
-> The above command returns an HTTP 204 if successful or an HTTP error
+> Responds with HTTP 204 if successful or an HTTP error
 > otherwise.
 
 Deletes a specific paper. The data of the paper is deleted and it's link
