@@ -122,7 +122,7 @@ the created paper.
 
 ### HTTP Request
 
-`POST https://api.bitpaper.io/api/v1/<name>`
+`POST https://api.bitpaper.io/api/v1/paper/<name>`
 
 ### URL Parameters
 
@@ -162,7 +162,7 @@ is made permanently inaccessible.
 
 ### HTTP Request
 
-`DELETE https://api.bitpaper.io/api/v1/<ID>`
+`DELETE https://api.bitpaper.io/api/v1/paper/<ID>`
 
 ### URL Parameters
 
