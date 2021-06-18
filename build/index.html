@@ -308,6 +308,11 @@
       <ul id="toc" class="toc-list-h1">
           <li>
             <a href="#introduction" class="toc-h1 toc-link" data-title="Introduction">Introduction</a>
+              <ul class="toc-list-h2">
+                  <li>
+                    <a href="#usage" class="toc-h2 toc-link" data-title="Usage">Usage</a>
+                  </li>
+              </ul>
           </li>
           <li>
             <a href="#authentication" class="toc-h1 toc-link" data-title="Authentication">Authentication</a>
@@ -336,7 +341,7 @@
           </li>
       </ul>
         <ul class="toc-footer">
-            <li><a href='https://bitpaper.io/contact'>Contact us for an API Key</a></li>
+            <li><a href='https://bitpaper.io/contact'>Contact us for an API Token</a></li>
             <li><a href='https://bitpaper.io'>Back to Bitpaper</a></li>
         </ul>
     </div>
@@ -351,26 +356,42 @@ programmatically, using a REST API, and how to integrate
 Bitpaper in your website.</p>
 
 <p>You can view code examples in the dark area to the right.</p>
+<h2 id='usage'>Usage</h2>
+<p>The Bitpaper API is organized around REST. It uses predictable
+resource-oriented URLs, accepts JSON-encoded request bodies,
+returns JSON-encoded responses and uses standard HTTP response codes,
+authentication, and verbs.</p>
+
+<ul>
+<li>All requests <em>must</em> be made via HTTPS.</li>
+<li>Requests which require a request body use JSON as the request body format,
+therefore they <em>must</em> include a <code>Content-Type: application/json</code> header.</li>
+</ul>
 <h1 id='authentication'>Authentication</h1><div class="highlight"><pre class="highlight shell tab-shell"><code><span class="c"># An example of an authorized API call</span>
 curl <span class="s2">"api_endpoint_here"</span> <span class="se">\</span>
   <span class="nt">-H</span> <span class="s2">"Authorization: my-super-secret-api-token"</span>
 </code></pre></div>
 <blockquote>
-<p>Make sure to replace <code>my-super-secret-api-token</code> with your API key.</p>
+<p>Make sure to replace <code>my-super-secret-api-token</code> with your API token.</p>
 </blockquote>
 
-<p>Bitpaper uses API keys to allow access to the API.
-You can view your API key in your Bitpaper
+<p>Bitpaper uses API tokens to allow access to the API.
+You can view your API token in your Bitpaper
 <a href="http://bitpaper.io/account#developers">account</a>.</p>
 
-<p>Bitpaper expects for the API key to be included in all API requests to the
+<p>Bitpaper expects for the API token to be included in all API requests to the
 server in a header that looks like the following:</p>
 
 <p><code>Authorization: my-super-secret-api-token</code></p>
 
 <aside class="notice">
-You must replace <code>my-super-secret-api-token</code> with your personal
-API key, found in My Account.
+  You must replace <code>my-super-secret-api-token</code> with your personal
+  API token, found in My Account.
+</aside>
+
+<aside class="warning">
+  Do not share your API token with anyone. The API token is used to uniquely
+  identify you when using the Bitpaper API.
 </aside>
 <h1 id='papers'>Papers</h1>
 <p>Papers are the primary resource in Bitpaper. They represent a collaborative

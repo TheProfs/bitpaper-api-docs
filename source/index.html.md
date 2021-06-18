@@ -5,7 +5,7 @@ language_tabs: # must be one of https://git.io/vQNgJ
   #- shell
 
 toc_footers:
-  - <a href='https://bitpaper.io/contact'>Contact us for an API Key</a>
+  - <a href='https://bitpaper.io/contact'>Contact us for an API Token</a>
   - <a href='https://bitpaper.io'>Back to Bitpaper</a>
 
 includes:
@@ -26,6 +26,17 @@ Bitpaper in your website.
 
 You can view code examples in the dark area to the right.
 
+## Usage
+
+The Bitpaper API is organized around REST. It uses predictable
+resource-oriented URLs, accepts JSON-encoded request bodies,
+returns JSON-encoded responses and uses standard HTTP response codes,
+authentication, and verbs.
+
+- All requests *must* be made via HTTPS.
+- Requests which require a request body use JSON as the request body format,
+  therefore they *must* include a `Content-Type: application/json` header.
+
 # Authentication
 
 ```shell
@@ -34,20 +45,25 @@ curl "api_endpoint_here" \
   -H "Authorization: my-super-secret-api-token"
 ```
 
-> Make sure to replace `my-super-secret-api-token` with your API key.
+> Make sure to replace `my-super-secret-api-token` with your API token.
 
-Bitpaper uses API keys to allow access to the API.
-You can view your API key in your Bitpaper
+Bitpaper uses API tokens to allow access to the API.
+You can view your API token in your Bitpaper
 [account](http://bitpaper.io/account#developers).
 
-Bitpaper expects for the API key to be included in all API requests to the
+Bitpaper expects for the API token to be included in all API requests to the
 server in a header that looks like the following:
 
 `Authorization: my-super-secret-api-token`
 
 <aside class="notice">
-You must replace <code>my-super-secret-api-token</code> with your personal
-API key, found in My Account.
+  You must replace <code>my-super-secret-api-token</code> with your personal
+  API token, found in My Account.
+</aside>
+
+<aside class="warning">
+  Do not share your API token with anyone. The API token is used to uniquely
+  identify you when using the Bitpaper API.
 </aside>
 
 # Papers
