@@ -385,9 +385,10 @@ collaborate on the whiteboard.</p>
 <p>Papers are uniquely identified by their <code>id_session</code> which is the last
 part of the returned URL.</p>
 <h2 id='create-a-paper'>Create a Paper</h2><div class="highlight"><pre class="highlight shell tab-shell"><code>curl <span class="s2">"https://api.bitpaper.io/api/v1/paper/maths"</span> <span class="se">\</span>
-<span class="nt">--data</span> <span class="s2">"can_create_call=true"</span> <span class="se">\</span>
 <span class="nt">-X</span> POST <span class="se">\</span>
-<span class="nt">-H</span> <span class="s2">"Authorization: my-super-secret-api-token"</span>
+<span class="nt">-H</span> <span class="s2">"Content-Type: application/json"</span> <span class="se">\</span>
+<span class="nt">-H</span> <span class="s2">"Authorization: my-super-secret-api-token"</span> <span class="se">\</span>
+<span class="nt">--data</span> <span class="s1">'{"can_create_call":true }'</span>
 </code></pre></div>
 <blockquote>
 <p>The above command returns JSON structured like this:</p>
@@ -413,12 +414,14 @@ the created paper.</p>
 <table><thead>
 <tr>
 <th>Parameter</th>
+<th>Type</th>
 <th>Description</th>
 </tr>
 </thead><tbody>
 <tr>
 <td>name</td>
-<td>String: The name of the paper to create. Does not have to be unique.</td>
+<td>String (URL-safe, between 6-64 chars)</td>
+<td>A name for the paper. Does not have to be unique.</td>
 </tr>
 </tbody></table>
 <h3 id='body-parameters'>Body Parameters</h3>
@@ -465,7 +468,7 @@ is made permanently inaccessible.</p>
 </thead><tbody>
 <tr>
 <td>ID</td>
-<td>String: The ID of the paper to delete</td>
+<td>String: The <code>id_session</code> of the paper to delete</td>
 </tr>
 </tbody></table>
 <h1 id='whitelabelling'>Whitelabelling</h1>
