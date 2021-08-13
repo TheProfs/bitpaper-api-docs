@@ -373,8 +373,9 @@ therefore they <em>must</em> include a <code>Content-Type: application/json</cod
 <h3 id='rate-limiting'>Rate Limiting</h3>
 <p>The Bitpaper API employs a rate limiter to guard against bursts of incoming
 traffic in order to maximise its stability. Users who send many requests in
-quick succession may see error responses that show up as status code <code>429</code>.
-All requests to the Bitpaper API are limited to 1800 requests per hour.</p>
+quick succession may see error responses that show up as status code <code>429</code>.</p>
+
+<p>All requests to the Bitpaper API are limited to 600 requests per hour.</p>
 
 <p><a href='https://bitpaper.io/contact'>Contact us</a> if you need to increase
 this limit.</p>

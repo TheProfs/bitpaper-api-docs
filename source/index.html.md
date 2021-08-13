@@ -42,7 +42,8 @@ authentication, and verbs.
 The Bitpaper API employs a rate limiter to guard against bursts of incoming
 traffic in order to maximise its stability. Users who send many requests in
 quick succession may see error responses that show up as status code `429`.
-All requests to the Bitpaper API are limited to 1800 requests per hour.
+
+All requests to the Bitpaper API are limited to 600 requests per hour.
 
 <a href='https://bitpaper.io/contact'>Contact us</a> if you need to increase
 this limit.
