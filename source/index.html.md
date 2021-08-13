@@ -52,10 +52,10 @@ this limit.
 ```shell
 # An example of an authorized API call
 curl "api_endpoint_here" \
-  -H "Authorization: my-super-secret-api-token"
+  -H "Authorization: Bearer my-secret-api-token"
 ```
 
-> Make sure to replace `my-super-secret-api-token` with your API token.
+> Make sure to replace `my-secret-api-token` with your API token.
 
 Bitpaper uses API tokens to allow access to the API.
 You can view your API token in your Bitpaper
@@ -64,10 +64,10 @@ You can view your API token in your Bitpaper
 Bitpaper expects for the API token to be included in all API requests to the
 server in a header that looks like the following:
 
-`Authorization: my-super-secret-api-token`
+`Authorization: Bearer my-secret-api-token`
 
 <aside class="notice">
-  You must replace <code>my-super-secret-api-token</code> with your personal
+  You must replace <code>my-secret-api-token</code> with your personal
   API token, found in My Account.
 </aside>
 
@@ -83,58 +83,51 @@ whiteboard instance accessible via a permanent URL.
 
 Each paper in Bitpaper has 100 pages.
 
-Creating a paper will give you a permanent URL which you can simply visit to
-launch the whiteboard instance. This URL can be shared with others to
+Creating a paper will give you permanent URLs which you can simply visit to
+launch the whiteboard instance. The URLs can be shared with others to
 collaborate on the whiteboard.
-
-Papers are uniquely identified by their `id_session` which is the last
-part of the returned URL.
 
 ## Create a Paper
 
 ```shell
-curl "https://api.bitpaper.io/api/v1/paper/maths" \
+curl "https://api.bitpaper.io/api/v1/paper" \
 -X POST \
 -H "Content-Type: application/json" \
--H "Authorization: my-super-secret-api-token" \
---data '{"can_create_call":true}'
+-H "Authorisation: Bearer <my-secret-api-token>" \
+--data '{"name":"Maths"}'
 ```
 
 > Returns JSON structured like this:
 
 ```json
 {
+  "id_saved_paper": "ddc95912-2a81-a25e-b589-8de1d472f6e8",
   "id_session": "sHKrJLF7h",
   "name": "Maths",
   "url": "https://bitpaper.io/go/Maths/sHKrJLF7h",
-  "created_at": "2021-06-16T01:37:11.558Z",
-  "permissions": {
-    "can_create_call": true
+  "created_at": "2021-01-01T01:00:00.000Z",
+  "urls": {
+    "admin": "https://bitpaper.io/go/Maths/xdXfoI?access-token=eyJhbGciO",
+    "guest": "https://bitpaper.io/go/Maths/xdXfoI?access-token=iJIUzI9.e"
   }
 }
 ```
 
-Creates a paper and returns an `id_session` which uniquely
-identifies the paper.
+Creates a paper and returns the paper information and URLs which can be used
+to access the paper.
 
-Simply visiting the `url` provided in the response would take you directly to
+Visiting any of the URLs provided in the response would take you directly to
 the created paper.
 
 ### HTTP Request
 
-`POST https://api.bitpaper.io/api/v1/paper/<name>`
+`POST https://api.bitpaper.io/api/v1/paper`
 
-### URL Parameters
+### Body Parameters
 
 Parameter | Type | Description
 --------- | ---- | -----------
 `name` | `String`: (URL-safe, between 4-64 chars) | A name for the paper. Does not have to be unique.
-
-### Body Parameters
-
-Parameter | Description
---------- | -----------
-`can_create_call` | `Boolean`: Whether this paper should allow audio/video calls
 
 ### Response
 
@@ -142,14 +135,16 @@ Responds with `HTTP 200` if successful.
 
 Parameter | Description
 --------- | -----------
+`id_saved_paper` | `String`: (36 chars)
 `id_session` | `String`: (URL-safe, between 8-64 chars)
 `name`       | `String`: (URL-safe, between 4-64 chars)
-`created_at` | `String`: Datetime of paper creation
-`permissions`| `Object`: Contains permission properties
-`permissions.can_create_call`| `Boolean`: Whether calls are allowed
+`created_at` | `String`: Timestamp of paper creation
+`urls`| `Object`: Contains the URLs for accessing the papers
+`urls.admin`| `Boolean`: URL which accesses the paper as an administrator/owner
+`urls.guest`| `Boolean`: URL which accesses the paper as a guest
 
 <aside class="notice">
-An <code>id_session</code> is a randomly-generated, unique and permanent
+An <code>id_saved_paper</code> is a randomly-generated, unique and permanent
 identifier pointing to a paper.
 You can safely store this in your system to match a paper to a user or a class.
 </aside>
@@ -158,29 +153,51 @@ You can safely store this in your system to match a paper to a user or a class.
   Creating a paper also charges it to your account.
 </aside>
 
+## Accessing created papers
+
+Created papers contain URLs which can be used to redirect to them.
+
+### Administrator vs Guest
+
+Each paper contains 2 URLs, one for **administrator** and one for **guest**.
+
+- The administrator has full privileges on the paper (i.e can lock the paper).
+- The guest on the other hand has limited privileges. They cannot lock the
+  paper.
+
+### Give names to your users
+
+Papers include features which display the name of the user.
+For example the chat function displays the name of each user posting a message.
+
+To give a name to the user simply attach a `user_name=<name>` URL query
+parameter to the URL like so:
+
+`https://bitpaper.io/go/Hello%20World/xdXfoI?access-token=foo&user_name=John%20Doe`
+
+
 ## Delete a Paper
 
 ```shell
-curl "https://api.bitpaper.io/api/v1/paper/sHKrJLF7h" \
+curl "https://api.bitpaper.io/api/v1/paper/ddc95912-2a81-a25e-b589-8de1d472f6e8" \
   -X DELETE \
-  -H "Authorization: my-super-secret-api-token"
+  -H "Authorisation: Bearer my-secret-api-token"
 ```
 
-> Responds with HTTP 204 if successful or an HTTP error
-> otherwise.
+> Responds with HTTP 204 if successful or an HTTP error otherwise.
 
 Deletes a specific paper. The data of the paper is deleted and it's link
 is made permanently inaccessible.
 
 ### HTTP Request
 
-`DELETE https://api.bitpaper.io/api/v1/paper/<id_session>`
+`DELETE https://api.bitpaper.io/api/v1/paper/<id_saved_paper>`
 
 ### URL Parameters
 
 Parameter | Description
 --------- | -----------
-`id_session` | `String`: The `id_session` of the paper to delete
+`id_saved_paper` | `String`: The `id_saved_paper` of the paper to delete
 
 ### Response
 
@@ -227,21 +244,13 @@ third-party whiteboard.
 
 You can embed Bitpaper in a page within your site by using an `<iframe>`.
 
-The iframe `src` *must* be set to the following path to redirect to a paper:
-
-`https://bitpaper.io/go/[paper_name]/[id_session]`
-
-- Replace `[paper_name]` with the name of the paper.
-- Replace `[id_session]` with the `id_session` returned by a `POST /paper`
-  call.
-
 Ideally you would embed the iframe on a path within your website that accepts
 the `name` and the `id` of the Paper as URL parts so it can be shared easily.
 
 A good example would be: [https://whiteboard.yourdomain.io/maths/sHKrJLF7h](https://whiteboard.yourdomain.io/maths/sHKrJLF7h).
 
-Then using JS, replace the root domain with `https://bitpaper.io` just
-like the provided example.
+The `src` of the iframe can be set to either of the URLs returned in your
+created paper.
 
 <aside class="warning">
   <strong> Remember: </strong> Your site must be set as an origin in your

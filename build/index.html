@@ -324,6 +324,9 @@
                     <a href="#create-a-paper" class="toc-h2 toc-link" data-title="Create a Paper">Create a Paper</a>
                   </li>
                   <li>
+                    <a href="#accessing-created-papers" class="toc-h2 toc-link" data-title="Accessing created papers">Accessing created papers</a>
+                  </li>
+                  <li>
                     <a href="#delete-a-paper" class="toc-h2 toc-link" data-title="Delete a Paper">Delete a Paper</a>
                   </li>
               </ul>
@@ -377,10 +380,10 @@ All requests to the Bitpaper API are limited to 1800 requests per hour.</p>
 this limit.</p>
 <h1 id='authentication'>Authentication</h1><div class="highlight"><pre class="highlight shell tab-shell"><code><span class="c"># An example of an authorized API call</span>
 curl <span class="s2">"api_endpoint_here"</span> <span class="se">\</span>
-  <span class="nt">-H</span> <span class="s2">"Authorization: my-super-secret-api-token"</span>
+  <span class="nt">-H</span> <span class="s2">"Authorization: Bearer my-secret-api-token"</span>
 </code></pre></div>
 <blockquote>
-<p>Make sure to replace <code>my-super-secret-api-token</code> with your API token.</p>
+<p>Make sure to replace <code>my-secret-api-token</code> with your API token.</p>
 </blockquote>
 
 <p>Bitpaper uses API tokens to allow access to the API.
@@ -390,10 +393,10 @@ You can view your API token in your Bitpaper
 <p>Bitpaper expects for the API token to be included in all API requests to the
 server in a header that looks like the following:</p>
 
-<p><code>Authorization: my-super-secret-api-token</code></p>
+<p><code>Authorization: Bearer my-secret-api-token</code></p>
 
 <aside class="notice">
-  You must replace <code>my-super-secret-api-token</code> with your personal
+  You must replace <code>my-secret-api-token</code> with your personal
   API token, found in My Account.
 </aside>
 
@@ -407,39 +410,38 @@ whiteboard instance accessible via a permanent URL.</p>
 
 <p>Each paper in Bitpaper has 100 pages.</p>
 
-<p>Creating a paper will give you a permanent URL which you can simply visit to
-launch the whiteboard instance. This URL can be shared with others to
+<p>Creating a paper will give you permanent URLs which you can simply visit to
+launch the whiteboard instance. The URLs can be shared with others to
 collaborate on the whiteboard.</p>
-
-<p>Papers are uniquely identified by their <code>id_session</code> which is the last
-part of the returned URL.</p>
-<h2 id='create-a-paper'>Create a Paper</h2><div class="highlight"><pre class="highlight shell tab-shell"><code>curl <span class="s2">"https://api.bitpaper.io/api/v1/paper/maths"</span> <span class="se">\</span>
+<h2 id='create-a-paper'>Create a Paper</h2><div class="highlight"><pre class="highlight shell tab-shell"><code>curl <span class="s2">"https://api.bitpaper.io/api/v1/paper"</span> <span class="se">\</span>
 <span class="nt">-X</span> POST <span class="se">\</span>
 <span class="nt">-H</span> <span class="s2">"Content-Type: application/json"</span> <span class="se">\</span>
-<span class="nt">-H</span> <span class="s2">"Authorization: my-super-secret-api-token"</span> <span class="se">\</span>
-<span class="nt">--data</span> <span class="s1">'{"can_create_call":true}'</span>
+<span class="nt">-H</span> <span class="s2">"Authorisation: Bearer &lt;my-secret-api-token&gt;"</span> <span class="se">\</span>
+<span class="nt">--data</span> <span class="s1">'{"name":"Maths"}'</span>
 </code></pre></div>
 <blockquote>
 <p>Returns JSON structured like this:</p>
 </blockquote>
 <div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="nl">"id_saved_paper"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ddc95912-2a81-a25e-b589-8de1d472f6e8"</span><span class="p">,</span><span class="w">
   </span><span class="nl">"id_session"</span><span class="p">:</span><span class="w"> </span><span class="s2">"sHKrJLF7h"</span><span class="p">,</span><span class="w">
   </span><span class="nl">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Maths"</span><span class="p">,</span><span class="w">
   </span><span class="nl">"url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://bitpaper.io/go/Maths/sHKrJLF7h"</span><span class="p">,</span><span class="w">
-  </span><span class="nl">"created_at"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2021-06-16T01:37:11.558Z"</span><span class="p">,</span><span class="w">
-  </span><span class="nl">"permissions"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-    </span><span class="nl">"can_create_call"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
+  </span><span class="nl">"created_at"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2021-01-01T01:00:00.000Z"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"urls"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nl">"admin"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://bitpaper.io/go/Maths/xdXfoI?access-token=eyJhbGciO"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"guest"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://bitpaper.io/go/Maths/xdXfoI?access-token=iJIUzI9.e"</span><span class="w">
   </span><span class="p">}</span><span class="w">
 </span><span class="p">}</span><span class="w">
 </span></code></pre></div>
-<p>Creates a paper and returns an <code>id_session</code> which uniquely
-identifies the paper.</p>
+<p>Creates a paper and returns the paper information and URLs which can be used
+to access the paper.</p>
 
-<p>Simply visiting the <code>url</code> provided in the response would take you directly to
+<p>Visiting any of the URLs provided in the response would take you directly to
 the created paper.</p>
 <h3 id='http-request'>HTTP Request</h3>
-<p><code>POST https://api.bitpaper.io/api/v1/paper/&lt;name&gt;</code></p>
-<h3 id='url-parameters'>URL Parameters</h3>
+<p><code>POST https://api.bitpaper.io/api/v1/paper</code></p>
+<h3 id='body-parameters'>Body Parameters</h3>
 <table><thead>
 <tr>
 <th>Parameter</th>
@@ -453,18 +455,6 @@ the created paper.</p>
 <td>A name for the paper. Does not have to be unique.</td>
 </tr>
 </tbody></table>
-<h3 id='body-parameters'>Body Parameters</h3>
-<table><thead>
-<tr>
-<th>Parameter</th>
-<th>Description</th>
-</tr>
-</thead><tbody>
-<tr>
-<td><code>can_create_call</code></td>
-<td><code>Boolean</code>: Whether this paper should allow audio/video calls</td>
-</tr>
-</tbody></table>
 <h3 id='response'>Response</h3>
 <p>Responds with <code>HTTP 200</code> if successful.</p>
 
@@ -475,6 +465,10 @@ the created paper.</p>
 </tr>
 </thead><tbody>
 <tr>
+<td><code>id_saved_paper</code></td>
+<td><code>String</code>: (36 chars)</td>
+</tr>
+<tr>
 <td><code>id_session</code></td>
 <td><code>String</code>: (URL-safe, between 8-64 chars)</td>
 </tr>
@@ -484,20 +478,24 @@ the created paper.</p>
 </tr>
 <tr>
 <td><code>created_at</code></td>
-<td><code>String</code>: Datetime of paper creation</td>
+<td><code>String</code>: Timestamp of paper creation</td>
 </tr>
 <tr>
-<td><code>permissions</code></td>
-<td><code>Object</code>: Contains permission properties</td>
+<td><code>urls</code></td>
+<td><code>Object</code>: Contains the URLs for accessing the papers</td>
 </tr>
 <tr>
-<td><code>permissions.can_create_call</code></td>
-<td><code>Boolean</code>: Whether calls are allowed</td>
+<td><code>urls.admin</code></td>
+<td><code>Boolean</code>: URL which accesses the paper as an administrator/owner</td>
+</tr>
+<tr>
+<td><code>urls.guest</code></td>
+<td><code>Boolean</code>: URL which accesses the paper as a guest</td>
 </tr>
 </tbody></table>
 
 <aside class="notice">
-An <code>id_session</code> is a randomly-generated, unique and permanent
+An <code>id_saved_paper</code> is a randomly-generated, unique and permanent
 identifier pointing to a paper.
 You can safely store this in your system to match a paper to a user or a class.
 </aside>
@@ -505,20 +503,37 @@ You can safely store this in your system to match a paper to a user or a class.
 <aside class="warning">
   Creating a paper also charges it to your account.
 </aside>
-<h2 id='delete-a-paper'>Delete a Paper</h2><div class="highlight"><pre class="highlight shell tab-shell"><code>curl <span class="s2">"https://api.bitpaper.io/api/v1/paper/sHKrJLF7h"</span> <span class="se">\</span>
+<h2 id='accessing-created-papers'>Accessing created papers</h2>
+<p>Created papers contain URLs which can be used to redirect to them.</p>
+<h3 id='administrator-vs-guest'>Administrator vs Guest</h3>
+<p>Each paper contains 2 URLs, one for <strong>administrator</strong> and one for <strong>guest</strong>.</p>
+
+<ul>
+<li>The administrator has full privileges on the paper (i.e can lock the paper).</li>
+<li>The guest on the other hand has limited privileges. They cannot lock the
+paper.</li>
+</ul>
+<h3 id='give-names-to-your-users'>Give names to your users</h3>
+<p>Papers include features which display the name of the user.
+For example the chat function displays the name of each user posting a message.</p>
+
+<p>To give a name to the user simply attach a <code>user_name=&lt;name&gt;</code> URL query
+parameter to the URL like so:</p>
+
+<p><code>https://bitpaper.io/go/Hello%20World/xdXfoI?access-token=foo&amp;user_name=John%20Doe</code></p>
+<h2 id='delete-a-paper'>Delete a Paper</h2><div class="highlight"><pre class="highlight shell tab-shell"><code>curl <span class="s2">"https://api.bitpaper.io/api/v1/paper/ddc95912-2a81-a25e-b589-8de1d472f6e8"</span> <span class="se">\</span>
   <span class="nt">-X</span> DELETE <span class="se">\</span>
-  <span class="nt">-H</span> <span class="s2">"Authorization: my-super-secret-api-token"</span>
+  <span class="nt">-H</span> <span class="s2">"Authorisation: Bearer my-secret-api-token"</span>
 </code></pre></div>
 <blockquote>
-<p>Responds with HTTP 204 if successful or an HTTP error
-otherwise.</p>
+<p>Responds with HTTP 204 if successful or an HTTP error otherwise.</p>
 </blockquote>
 
 <p>Deletes a specific paper. The data of the paper is deleted and it&#39;s link
 is made permanently inaccessible.</p>
 <h3 id='http-request-2'>HTTP Request</h3>
-<p><code>DELETE https://api.bitpaper.io/api/v1/paper/&lt;id_session&gt;</code></p>
-<h3 id='url-parameters-2'>URL Parameters</h3>
+<p><code>DELETE https://api.bitpaper.io/api/v1/paper/&lt;id_saved_paper&gt;</code></p>
+<h3 id='url-parameters'>URL Parameters</h3>
 <table><thead>
 <tr>
 <th>Parameter</th>
@@ -526,8 +541,8 @@ is made permanently inaccessible.</p>
 </tr>
 </thead><tbody>
 <tr>
-<td><code>id_session</code></td>
-<td><code>String</code>: The <code>id_session</code> of the paper to delete</td>
+<td><code>id_saved_paper</code></td>
+<td><code>String</code>: The <code>id_saved_paper</code> of the paper to delete</td>
 </tr>
 </tbody></table>
 <h3 id='response-2'>Response</h3>
@@ -567,23 +582,13 @@ third-party whiteboard.</p>
 </code></pre></div>
 <p>You can embed Bitpaper in a page within your site by using an <code>&lt;iframe&gt;</code>.</p>
 
-<p>The iframe <code>src</code> <em>must</em> be set to the following path to redirect to a paper:</p>
-
-<p><code>https://bitpaper.io/go/[paper_name]/[id_session]</code></p>
-
-<ul>
-<li>Replace <code>[paper_name]</code> with the name of the paper.</li>
-<li>Replace <code>[id_session]</code> with the <code>id_session</code> returned by a <code>POST /paper</code>
-call.</li>
-</ul>
-
 <p>Ideally you would embed the iframe on a path within your website that accepts
 the <code>name</code> and the <code>id</code> of the Paper as URL parts so it can be shared easily.</p>
 
 <p>A good example would be: <a href="https://whiteboard.yourdomain.io/maths/sHKrJLF7h">https://whiteboard.yourdomain.io/maths/sHKrJLF7h</a>.</p>
 
-<p>Then using JS, replace the root domain with <code>https://bitpaper.io</code> just
-like the provided example.</p>
+<p>The <code>src</code> of the iframe can be set to either of the URLs returned in your
+created paper.</p>
 
 <aside class="warning">
   <strong> Remember: </strong> Your site must be set as an origin in your
