@@ -5,7 +5,7 @@ language_tabs: # must be one of https://git.io/vQNgJ
   #- shell
 
 toc_footers:
-  - <a href='https://bitpaper.io/contact'>Contact us for an API Token</a>
+  - <a href='https://bitpaper.io/account#api'>Get your API token</a>
   - <a href='https://bitpaper.io'>Back to Bitpaper</a>
 
 includes:
