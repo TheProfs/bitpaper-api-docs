@@ -102,7 +102,7 @@ curl "https://api.bitpaper.io/api/v1/paper" \
 ```json
 {
   "id_saved_paper": "ddc95912-2a81-a25e-b589-8de1d472f6e8",
-  "id_session": "sHKrJLF7h",
+  "id_session": "xdXfoI",
   "name": "Maths",
   "created_at": "2021-01-01T01:00:00.000Z",
   "urls": {
