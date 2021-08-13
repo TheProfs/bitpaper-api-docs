@@ -104,7 +104,6 @@ curl "https://api.bitpaper.io/api/v1/paper" \
   "id_saved_paper": "ddc95912-2a81-a25e-b589-8de1d472f6e8",
   "id_session": "sHKrJLF7h",
   "name": "Maths",
-  "url": "https://bitpaper.io/go/Maths/sHKrJLF7h",
   "created_at": "2021-01-01T01:00:00.000Z",
   "urls": {
     "admin": "https://bitpaper.io/go/Maths/xdXfoI?access-token=eyJhbGciO",
