@@ -28,35 +28,39 @@ You can view code examples in the dark area to the right.
 
 ## Usage
 
-The Bitpaper API is organized around REST. It uses predictable
-resource-oriented URLs, accepts JSON-encoded request bodies,
-returns JSON-encoded responses and uses standard HTTP response codes,
-authentication, and verbs.
+The Bitpaper API is organized around [REST](https://en.wikipedia.org/wiki/Representational_state_transfer).
 
-- All requests *must* be made via HTTPS.
+It uses predictable resource-oriented URLs, accepts
+[JSON](https://en.wikipedia.org/wiki/JSON)-encoded request bodies, returns
+JSON-encoded responses and uses
+standard [HTTP response codes](https://en.wikipedia.org/wiki/List_of_HTTP_status_codes),
+authentication and verbs.
+
+- All requests *must* be made via [HTTPS](https://en.wikipedia.org/wiki/HTTPS).
 - Requests which require a request body use JSON as the request body format,
   therefore they *must* include a `Content-Type: application/json` header.
 
-### Rate Limiting
+## Rate Limiting
 
-The Bitpaper API employs a rate limiter to guard against bursts of incoming
-traffic in order to maximise its stability. Users who send many requests in
-quick succession may see error responses that show up as status code `429`.
+The Bitpaper API employs a [rate limiter](https://en.wikipedia.org/wiki/Rate_limiting)
+to guard against bursts of incoming traffic in order to maximise its stability.
+Users who send many requests in quick succession may see error responses that
+show up as HTTP status code `429`.
 
-All requests to the Bitpaper API are limited to 600 requests per hour.
+All requests to the Bitpaper API are limited to **600 requests per hour**.
 
 <a href='https://bitpaper.io/contact'>Contact us</a> if you need to increase
 this limit.
 
-# Authentication
+## Authentication
 
 ```shell
-# An example of an authorized API call
-curl "api_endpoint_here" \
-  -H "Authorization: Bearer my-secret-api-token"
+# An example of an authorised API call
+curl "<api-endpoint-here>" \
+  -H "Authorisation: Bearer <my-secret-api-token>"
 ```
 
-> Make sure to replace `my-secret-api-token` with your API token.
+> Make sure to replace `<my-secret-api-token>` with your actual API token.
 
 Bitpaper uses API tokens to allow access to the API.
 You can view your API token in your Bitpaper
@@ -65,16 +69,34 @@ You can view your API token in your Bitpaper
 Bitpaper expects for the API token to be included in all API requests to the
 server in a header that looks like the following:
 
-`Authorization: Bearer my-secret-api-token`
-
-<aside class="notice">
-  You must replace <code>my-secret-api-token</code> with your personal
-  API token, found in My Account.
-</aside>
+`Authorisation: Bearer <my-secret-api-token>`
 
 <aside class="warning">
-  Do not share your API token with anyone. The API token is used to uniquely
+  Do not share your API tokens with anyone. The API tokens are used to uniquely
   identify you when using the Bitpaper API.
+</aside>
+
+## Test Mode
+
+The Bitpaper API allows simulating requests using your test API token so you
+can test the API without incurring charges.
+
+Bitpaper provides you with a set of 2 API tokens:
+
+- **Production API token**: Creates working papers and charges them to your
+  account. You should use this in your production/live app.
+- **Test API token**: Creates non-working papers which are not charged.
+  You should use this token to test API requests.
+
+Papers created using the test mode API token are not saved nor charged to your
+account.
+
+You can find your test API token alongside your production API token
+<a href='https://bitpaper.io/account#api'>here</a>.
+
+<aside class="warning">
+  Test tokens do not actually create working papers. Always remember to use
+  your production API token for your live app.
 </aside>
 
 # Papers
@@ -88,10 +110,21 @@ Creating a paper will give you permanent URLs which you can simply visit to
 launch the whiteboard instance. The URLs can be shared with others to
 collaborate on the whiteboard.
 
+## API Papers
+
+Papers created via the API do not require any of the visiting users to login.
+
+They have limited functionality (i.e the visiting user cannot save the paper in
+his own account) and the paper and any calls performed on the paper are charged
+to the API owner.
+
+They also do not display any references to the Bitpaper brand such as
+a logo, brand name etc.
+
 ## Create a Paper
 
 ```shell
-curl "https://api.bitpaper.io/api/v1/paper" \
+curl "https://api.bitpaper.io/public/api/v1/paper" \
 -X POST \
 -H "Content-Type: application/json" \
 -H "Authorisation: Bearer <my-secret-api-token>" \
@@ -106,6 +139,7 @@ curl "https://api.bitpaper.io/api/v1/paper" \
   "id_session": "xdXfoI",
   "name": "Maths",
   "created_at": "2021-01-01T01:00:00.000Z",
+  "is_test_paper": false,
   "urls": {
     "admin": "https://bitpaper.io/go/Maths/xdXfoI?access-token=eyJhbGciO",
     "guest": "https://bitpaper.io/go/Maths/xdXfoI?access-token=iJIUzI9.e"
@@ -121,7 +155,7 @@ the created paper.
 
 ### HTTP Request
 
-`POST https://api.bitpaper.io/api/v1/paper`
+`POST https://api.bitpaper.io/public/api/v1/paper`
 
 ### Body Parameters
 
@@ -138,6 +172,7 @@ Parameter | Description
 `id_saved_paper` | `String`: (36 chars)
 `id_session` | `String`: (URL-safe, between 8-64 chars)
 `name`       | `String`: (URL-safe, between 4-64 chars)
+`is_test_paper` | `Boolean`: `true` if paper was created using test API token
 `created_at` | `String`: Timestamp of paper creation
 `urls`| `Object`: Contains the URLs for accessing the papers
 `urls.admin`| `Boolean`: URL which accesses the paper as an administrator/owner
@@ -150,10 +185,11 @@ You can safely store this in your system to match a paper to a user or a class.
 </aside>
 
 <aside class="warning">
-  Creating a paper also charges it to your account.
+  Creating a paper with the production API token also charges it to your
+  account.
 </aside>
 
-## Accessing created papers
+## Access a Paper
 
 Created papers contain URLs which can be used to redirect to them.
 
@@ -175,13 +211,25 @@ parameter to the URL like so:
 
 `https://bitpaper.io/go/Hello%20World/xdXfoI?access-token=foo&user_name=John%20Doe`
 
+<aside class="notice">
+  A paper can have more than 1 administrator. If you redirect 2 users using the
+  `url.admin` URL, both of them would be able to perform top-level admin actions
+  on the paper.
+</aside>
+
+<aside class="notice">
+  Test papers do not redirect to a working paper. They redirect to a page
+  indicating whether you redirected to the correct URL. Papers created with
+  the production API token will actually redirect to a working collaborative
+  paper instance.
+</aside>
 
 ## Delete a Paper
 
 ```shell
-curl "https://api.bitpaper.io/api/v1/paper/ddc95912-2a81-a25e-b589-8de1d472f6e8" \
+curl "https://api.bitpaper.io/public/api/v1/paper/ddc95912-2a81-a25e-b589-8de1d472f6e8" \
   -X DELETE \
-  -H "Authorisation: Bearer my-secret-api-token"
+  -H "Authorisation: Bearer <my-secret-api-token>"
 ```
 
 > Responds with HTTP 204 if successful or an HTTP error otherwise.
@@ -191,7 +239,7 @@ is made permanently inaccessible.
 
 ### HTTP Request
 
-`DELETE https://api.bitpaper.io/api/v1/paper/<id_saved_paper>`
+`DELETE https://api.bitpaper.io/public/api/v1/paper/<id_saved_paper>`
 
 ### URL Parameters
 
@@ -216,9 +264,10 @@ third-party whiteboard.
 ```html
 <!--
   Embed this in your site on URL:
-  https://whiteboard.yourdomain.com/maths/sHKrJLF7h
+  https://whiteboard.yourdomain.com/Maths/xdXfoI
  -->
 <iframe
+  src="https://bitpaper.io/go/Maths/xdXfoI?access-token=eyJhbGciO&user_name=John%20Doe"
   allow="camera; microphone"
   style="
     position: fixed;
@@ -234,25 +283,19 @@ third-party whiteboard.
     height: 100%;
   ">
 </iframe>
-<script>
-  window.onload = () => {
-    const src = `https://bitpaper.io${window.location.pathname}`
-    document.querySelector('frame').src = src
-  }
-</script>
 ```
 
 You can embed Bitpaper in a page within your site by using an `<iframe>`.
+This allows you to display Bitpaper to your users in a page which is rendered
+in your own domain.
 
 Ideally you would embed the iframe on a path within your website that accepts
 the `name` and the `id` of the Paper as URL parts so it can be shared easily.
 
-A good example would be: [https://whiteboard.yourdomain.io/maths/sHKrJLF7h](https://whiteboard.yourdomain.io/maths/sHKrJLF7h).
-
 The `src` of the iframe can be set to either of the URLs returned in your
 created paper.
 
-<aside class="warning">
+<aside class="notice">
   <strong> Remember: </strong> Your site must be set as an origin in your
   Bitpaper account settings to allow integrating via an iframe.
 </aside>
