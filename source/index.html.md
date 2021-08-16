@@ -40,6 +40,9 @@ authentication and verbs.
 - Requests which require a request body use JSON as the request body format,
   therefore they *must* include a `Content-Type: application/json` header.
 
+API versioning follows the [Semantic Versioning](https://semver.org/)
+guidelines.
+
 ## Rate Limiting
 
 The Bitpaper API employs a [rate limiter](https://en.wikipedia.org/wiki/Rate_limiting)
