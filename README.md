@@ -27,6 +27,8 @@ bundle exec middleman server
 Simply edit `src/index.html.md`.
 More info on [Slate's][slate] homepage.
 
+Some sections are `includes` found in `src/includes/`
+
 ## Deploy to production
 
 ```bash

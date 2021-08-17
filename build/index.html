@@ -349,7 +349,15 @@
               </ul>
           </li>
           <li>
-            <a href="#errors" class="toc-h1 toc-link" data-title="Errors">Errors</a>
+            <a href="#status-codes" class="toc-h1 toc-link" data-title="Status Codes">Status Codes</a>
+          </li>
+          <li>
+            <a href="#changelog" class="toc-h1 toc-link" data-title="Changelog">Changelog</a>
+              <ul class="toc-list-h2">
+                  <li>
+                    <a href="#v1-0-0" class="toc-h2 toc-link" data-title="v1.0.0">v1.0.0</a>
+                  </li>
+              </ul>
           </li>
       </ul>
         <ul class="toc-footer">
@@ -651,7 +659,7 @@ created paper.</p>
   <strong> Remember: </strong> Your site must be set as an origin in your
   Bitpaper account settings to allow integrating via an iframe.
 </aside>
-<h1 id='errors'>Errors</h1>
+<h1 id='status-codes'>Status Codes</h1>
 <p>The Bitpaper API uses the following HTTP status codes:</p>
 
 <table><thead>
@@ -661,16 +669,24 @@ created paper.</p>
 </tr>
 </thead><tbody>
 <tr>
+<td><strong>200</strong></td>
+<td><strong>OK</strong> - Your request has succeeded and has response data.</td>
+</tr>
+<tr>
+<td><strong>400</strong></td>
+<td><strong>No Content</strong> - Your request has succeeded and has no response data.</td>
+</tr>
+<tr>
 <td><strong>400</strong></td>
 <td><strong>Bad Request</strong> - Your request is invalid.</td>
 </tr>
 <tr>
 <td><strong>401</strong></td>
-<td><strong>Unauthorised</strong> - Your API key is wrong.</td>
+<td><strong>Unauthorised</strong> - Bad authorisation header. The header is not formatted correctly or the API token is invalid or revoked</td>
 </tr>
 <tr>
 <td><strong>403</strong></td>
-<td><strong>Forbidden</strong> - Your subscription is not active and thus cannot be used to create requests.</td>
+<td><strong>Forbidden</strong> - Your subscription is not active or doesn&#39;t have sufficient privileges to perform the request</td>
 </tr>
 <tr>
 <td><strong>404</strong></td>
@@ -690,7 +706,7 @@ created paper.</p>
 </tr>
 <tr>
 <td><strong>429</strong></td>
-<td><strong>Too Many Requests</strong> - You&#39;re issuing too many requests! Slow down!</td>
+<td><strong>Too Many Requests</strong> - You&#39;re issuing too many requests. Slow down!</td>
 </tr>
 <tr>
 <td><strong>500</strong></td>
@@ -701,6 +717,12 @@ created paper.</p>
 <td><strong>Service Unavailable</strong> - We&#39;re temporarily offline for maintenance. Please try again later.</td>
 </tr>
 </tbody></table>
+<h1 id='changelog'>Changelog</h1><h2 id='v1-0-0'>v1.0.0</h2>
+<p>August 20 2021</p>
+
+<ul>
+<li>Initial release</li>
+</ul>
 
       </div>
       <div class="dark-box">

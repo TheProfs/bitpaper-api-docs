@@ -9,7 +9,8 @@ toc_footers:
   - <a href='https://bitpaper.io'>Back to Bitpaper</a>
 
 includes:
-  - errors
+  - status_codes
+  - changelog
 
 search: true
 
