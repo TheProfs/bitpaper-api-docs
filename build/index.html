@@ -396,8 +396,8 @@ guidelines.</p>
 <h2 id='rate-limiting'>Rate Limiting</h2>
 <p>The Bitpaper API employs a <a href="https://en.wikipedia.org/wiki/Rate_limiting">rate limiter</a>
 to guard against bursts of incoming traffic in order to maximise its stability.
-Users who send many requests in quick succession may see error responses that
-show up as HTTP status code <code>429</code>.</p>
+Users who send too many requests in quick succession may see error responses
+that show up as HTTP status code <code>429</code>.</p>
 
 <p>All requests to the Bitpaper API are limited to <strong>600 requests per hour</strong>.</p>
 
@@ -411,60 +411,65 @@ curl <span class="s2">"&lt;api-endpoint-here&gt;"</span> <span class="se">\</spa
 <p>Make sure to replace <code>&lt;my-secret-api-token&gt;</code> with your actual API token.</p>
 </blockquote>
 
-<p>Bitpaper uses API tokens to allow access to the API.
-You can view your API token in your Bitpaper
-<a href="http://bitpaper.io/account#developers">account</a>.</p>
+<p>Bitpaper uses API tokens to allow access to the API.</p>
 
-<p>Bitpaper expects for the API token to be included in all API requests to the
-server in a header that looks like the following:</p>
+<p>You can view your API token in your Bitpaper
+<a href="http://bitpaper.io/account#api">account</a>.</p>
+
+<p>Bitpaper requires your API token included in all API requests in a header that
+looks like this:</p>
 
 <p><code>Authorisation: Bearer &lt;my-secret-api-token&gt;</code></p>
 
 <aside class="warning">
   Do not share your API tokens with anyone. The API tokens are used to uniquely
-  identify you when using the Bitpaper API.
+  identify you when using the Bitpaper API. If your tokens become compromised
+  for any reason you can cycle them from your
+  [Enterprise Account settings](http://bitpaper.io/account#api)
+  but you would need to use the new tokens in any future API request.
 </aside>
 <h2 id='test-mode'>Test Mode</h2>
 <p>The Bitpaper API allows simulating requests using your test API token so you
-can test the API without incurring charges.</p>
+can test the API without incurring paper creation charges.</p>
 
-<p>Bitpaper provides you with a set of 2 API tokens:</p>
+<p>Bitpaper provides you with a set of 2 API tokens,
+found <a href="http://bitpaper.io/account#api">here</a>:</p>
 
 <ul>
-<li><strong>Production API token</strong>: Creates working papers and charges them to your
+<li><strong>Production API token</strong>: Creates functioning papers and charges them to your
 account. You should use this in your production/live app.</li>
-<li><strong>Test API token</strong>: Creates non-working papers which are not charged.
+<li><strong>Test API token</strong>: Creates non-functioning papers which are not charged.
 You should use this token to test API requests.</li>
 </ul>
 
-<p>Papers created using the test mode API token are not saved nor charged to your
-account.</p>
-
-<p>You can find your test API token alongside your production API token
-<a href='https://bitpaper.io/account#api'>here</a>.</p>
-
 <aside class="warning">
-  Test tokens do not actually create working papers. Always remember to use
-  your production API token for your live app.
+  Always remember to use your production API token for your live app.
 </aside>
 <h1 id='papers'>Papers</h1>
-<p>Papers are the primary resource in Bitpaper. They represent a collaborative
-whiteboard instance accessible via a permanent URL.</p>
+<p>Papers are the primary resource in Bitpaper.</p>
 
-<p>Each paper in Bitpaper has 100 pages.</p>
+<p>A Paper is a collaborative whiteboard instance accessible via a unique
+and permanent URL.</p>
 
-<p>Creating a paper will give you permanent URLs which you can simply visit to
-launch the whiteboard instance. The URLs can be shared with others to
-collaborate on the whiteboard.</p>
+<p>Creating a paper programatically will return URLs that users can visit to
+join and collaborate on a whiteboard instance.</p>
+
+<p>A paper (i.e URL) can have up to a maximum of 100 individual pages.
+Pages can be created and switched manually using the page toolbar on the
+top-right of a paper.</p>
 <h2 id='api-papers'>API Papers</h2>
-<p>Papers created via the API do not require any of the visiting users to login.</p>
+<p>By default API created papers have the full set of whiteboard tools and
+functionality including audio/video calls and screensharing.</p>
 
-<p>They have limited functionality (i.e the visiting user cannot save the paper in
-his own account) and the paper and any calls performed on the paper are charged
-to the API owner.</p>
+<p>You can control whether users have access to the paid audio/video calls and
+screensharing features using the Calls toggle in your
+<a href="http://bitpaper.io/account">account settings</a>.</p>
 
-<p>They also do not display any references to the Bitpaper brand such as
-a logo, brand name etc.</p>
+<p>API created Bitpapers do not display any references to the Bitpaper brand such
+as our logo or brand name.</p>
+
+<p>To mask the URL you will need to follow the
+<a href="https://developers.bitpaper.io/#whitelabelling">Whitelabelling</a> guide below.</p>
 <h2 id='create-a-paper'>Create a Paper</h2><div class="highlight"><pre class="highlight shell tab-shell"><code>curl <span class="s2">"https://api.bitpaper.io/public/api/v1/paper"</span> <span class="se">\</span>
 <span class="nt">-X</span> POST <span class="se">\</span>
 <span class="nt">-H</span> <span class="s2">"Content-Type: application/json"</span> <span class="se">\</span>
@@ -476,7 +481,6 @@ a logo, brand name etc.</p>
 </blockquote>
 <div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
   </span><span class="nl">"id_saved_paper"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ddc95912-2a81-a25e-b589-8de1d472f6e8"</span><span class="p">,</span><span class="w">
-  </span><span class="nl">"id_session"</span><span class="p">:</span><span class="w"> </span><span class="s2">"xdXfoI"</span><span class="p">,</span><span class="w">
   </span><span class="nl">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Maths"</span><span class="p">,</span><span class="w">
   </span><span class="nl">"created_at"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2021-01-01T01:00:00.000Z"</span><span class="p">,</span><span class="w">
   </span><span class="nl">"is_test_paper"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
@@ -521,10 +525,6 @@ the created paper.</p>
 <td><code>String</code>: (36 chars)</td>
 </tr>
 <tr>
-<td><code>id_session</code></td>
-<td><code>String</code>: (URL-safe, between 8-64 chars)</td>
-</tr>
-<tr>
 <td><code>name</code></td>
 <td><code>String</code>: (URL-safe, between 4-64 chars)</td>
 </tr>
@@ -555,21 +555,25 @@ An <code>id_saved_paper</code> is a randomly-generated, unique and permanent
 identifier pointing to a paper.
 You can safely store this in your system to match a paper to a user or a class.
 </aside>
-
-<aside class="warning">
-  Creating a paper with the production API token also charges it to your
-  account.
-</aside>
 <h2 id='access-a-paper'>Access a Paper</h2>
-<p>Created papers contain URLs which can be used to redirect to them.</p>
-<h3 id='administrator-vs-guest'>Administrator vs Guest</h3>
-<p>Each paper contains 2 URLs, one for <strong>administrator</strong> and one for <strong>guest</strong>.</p>
+<p>Created papers contain 2 URLs that can be used to join them, one for
+administrators and another one for guests.</p>
 
 <ul>
-<li>The administrator has full privileges on the paper (i.e can lock the paper).</li>
-<li>The guest on the other hand has limited privileges. They cannot lock the
-paper.</li>
+<li>Users who join the <strong>administrator</strong> URL will have full whiteboard
+privileges.</li>
+<li>Users who join the <strong>guest</strong> URL will have restricted whiteboard privileges.</li>
 </ul>
+
+<p>A paper can have more than 1 administrator or guest. If you redirect
+2 users using either the <code>url.admin</code> or <code>url.guest</code> both would have the same
+whiteboard privileges.</p>
+
+<aside class="notice">
+  At the moment the only privilege an admin has is the ability to lock a paper
+  (i.e stop guests from interacting with or editing it). We will be adding
+  further privileges and restrictions to papers over time.
+</aside>
 <h3 id='give-names-to-your-users'>Give names to your users</h3>
 <p>Papers include features which display the name of the user.
 For example the chat function displays the name of each user posting a message.</p>
@@ -578,19 +582,6 @@ For example the chat function displays the name of each user posting a message.<
 parameter to the URL like so:</p>
 
 <p><code>https://bitpaper.io/go/Hello%20World/xdXfoI?access-token=foo&amp;user_name=John%20Doe</code></p>
-
-<aside class="notice">
-  A paper can have more than 1 administrator. If you redirect 2 users using the
-  `url.admin` URL, both of them would be able to perform top-level admin actions
-  on the paper.
-</aside>
-
-<aside class="notice">
-  Test papers do not redirect to a working paper. They redirect to a page
-  indicating whether you redirected to the correct URL. Papers created with
-  the production API token will actually redirect to a working collaborative
-  paper instance.
-</aside>
 <h2 id='delete-a-paper'>Delete a Paper</h2><div class="highlight"><pre class="highlight shell tab-shell"><code>curl <span class="s2">"https://api.bitpaper.io/public/api/v1/paper/ddc95912-2a81-a25e-b589-8de1d472f6e8"</span> <span class="se">\</span>
   <span class="nt">-X</span> DELETE <span class="se">\</span>
   <span class="nt">-H</span> <span class="s2">"Authorisation: Bearer &lt;my-secret-api-token&gt;"</span>
@@ -599,8 +590,8 @@ parameter to the URL like so:</p>
 <p>Responds with HTTP 204 if successful or an HTTP error otherwise.</p>
 </blockquote>
 
-<p>Deletes a specific paper. The data of the paper is deleted and it&#39;s link
-is made permanently inaccessible.</p>
+<p>Deletes a specific paper. The content of the paper is permanently deleted and
+it&#39;s URL is made permanently inaccessible.</p>
 <h3 id='http-request-2'>HTTP Request</h3>
 <p><code>DELETE https://api.bitpaper.io/public/api/v1/paper/&lt;id_saved_paper&gt;</code></p>
 <h3 id='url-parameters'>URL Parameters</h3>
@@ -645,12 +636,9 @@ third-party whiteboard.</p>
   "</span><span class="nt">&gt;</span>
 <span class="nt">&lt;/iframe&gt;</span>
 </code></pre></div>
-<p>You can embed Bitpaper in a page within your site by using an <code>&lt;iframe&gt;</code>.
-This allows you to display Bitpaper to your users in a page which is rendered
-in your own domain.</p>
-
-<p>Ideally you would embed the iframe on a path within your website that accepts
-the <code>name</code> and the <code>id</code> of the Paper as URL parts so it can be shared easily.</p>
+<p>Bitpaper can be embedded into your website using an <code>&lt;iframe&gt;</code>.
+This allows you to display papers to your users in a webpage that is rendered
+on your own domain.</p>
 
 <p>The <code>src</code> of the iframe can be set to either of the URLs returned in your
 created paper.</p>
