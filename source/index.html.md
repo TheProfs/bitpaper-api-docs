@@ -48,8 +48,8 @@ guidelines.
 
 The Bitpaper API employs a [rate limiter](https://en.wikipedia.org/wiki/Rate_limiting)
 to guard against bursts of incoming traffic in order to maximise its stability.
-Users who send many requests in quick succession may see error responses that
-show up as HTTP status code `429`.
+Users who send too many requests in quick succession may see error responses
+that show up as HTTP status code `429`.
 
 All requests to the Bitpaper API are limited to **600 requests per hour**.
 
@@ -67,63 +67,68 @@ curl "<api-endpoint-here>" \
 > Make sure to replace `<my-secret-api-token>` with your actual API token.
 
 Bitpaper uses API tokens to allow access to the API.
-You can view your API token in your Bitpaper
-[account](http://bitpaper.io/account#developers).
 
-Bitpaper expects for the API token to be included in all API requests to the
-server in a header that looks like the following:
+You can view your API token in your Bitpaper
+[account](http://bitpaper.io/account#api).
+
+Bitpaper requires your API token included in all API requests in a header that
+looks like this:
 
 `Authorisation: Bearer <my-secret-api-token>`
 
 <aside class="warning">
   Do not share your API tokens with anyone. The API tokens are used to uniquely
-  identify you when using the Bitpaper API.
+  identify you when using the Bitpaper API. If your tokens become compromised
+  for any reason you can cycle them from your
+  [Enterprise Account settings](http://bitpaper.io/account#api)
+  but you would need to use the new tokens in any future API request.
 </aside>
 
 ## Test Mode
 
 The Bitpaper API allows simulating requests using your test API token so you
-can test the API without incurring charges.
+can test the API without incurring paper creation charges.
 
-Bitpaper provides you with a set of 2 API tokens:
+Bitpaper provides you with a set of 2 API tokens,
+found [here](http://bitpaper.io/account#api):
 
-- **Production API token**: Creates working papers and charges them to your
+- **Production API token**: Creates functioning papers and charges them to your
   account. You should use this in your production/live app.
-- **Test API token**: Creates non-working papers which are not charged.
+- **Test API token**: Creates non-functioning papers which are not charged.
   You should use this token to test API requests.
 
-Papers created using the test mode API token are not saved nor charged to your
-account.
-
-You can find your test API token alongside your production API token
-<a href='https://bitpaper.io/account#api'>here</a>.
-
 <aside class="warning">
-  Test tokens do not actually create working papers. Always remember to use
-  your production API token for your live app.
+  Always remember to use your production API token for your live app.
 </aside>
 
 # Papers
 
-Papers are the primary resource in Bitpaper. They represent a collaborative
-whiteboard instance accessible via a permanent URL.
+Papers are the primary resource in Bitpaper.
 
-Each paper in Bitpaper has 100 pages.
+A Paper is a collaborative whiteboard instance accessible via a unique
+and permanent URL.
 
-Creating a paper will give you permanent URLs which you can simply visit to
-launch the whiteboard instance. The URLs can be shared with others to
-collaborate on the whiteboard.
+Creating a paper programatically will return URLs that users can visit to
+join and collaborate on a whiteboard instance.
+
+A paper (i.e URL) can have up to a maximum of 100 individual pages.
+Pages can be created and switched manually using the page toolbar on the
+top-right of a paper.
 
 ## API Papers
 
-Papers created via the API do not require any of the visiting users to login.
+By default API created papers have the full set of whiteboard tools and
+functionality including audio/video calls and screensharing.
 
-They have limited functionality (i.e the visiting user cannot save the paper in
-his own account) and the paper and any calls performed on the paper are charged
-to the API owner.
+You can control whether users have access to the paid audio/video calls and
+screensharing features using the Calls toggle in your
+[account settings](http://bitpaper.io/account).
 
-They also do not display any references to the Bitpaper brand such as
-a logo, brand name etc.
+API created Bitpapers do not display any references to the Bitpaper brand such
+as our logo or brand name.
+
+To mask the URL you will need to follow the
+[Whitelabelling](https://developers.bitpaper.io/#whitelabelling) guide below.
 
 ## Create a Paper
 
@@ -140,7 +145,6 @@ curl "https://api.bitpaper.io/public/api/v1/paper" \
 ```json
 {
   "id_saved_paper": "ddc95912-2a81-a25e-b589-8de1d472f6e8",
-  "id_session": "xdXfoI",
   "name": "Maths",
   "created_at": "2021-01-01T01:00:00.000Z",
   "is_test_paper": false,
@@ -174,7 +178,6 @@ Responds with `HTTP 200` if successful.
 Parameter | Description
 --------- | -----------
 `id_saved_paper` | `String`: (36 chars)
-`id_session` | `String`: (URL-safe, between 8-64 chars)
 `name`       | `String`: (URL-safe, between 4-64 chars)
 `is_test_paper` | `Boolean`: `true` if paper was created using test API token
 `created_at` | `String`: Timestamp of paper creation
@@ -188,22 +191,24 @@ identifier pointing to a paper.
 You can safely store this in your system to match a paper to a user or a class.
 </aside>
 
-<aside class="warning">
-  Creating a paper with the production API token also charges it to your
-  account.
-</aside>
-
 ## Access a Paper
 
-Created papers contain URLs which can be used to redirect to them.
+Created papers contain 2 URLs that can be used to join them, one for
+administrators and another one for guests.
 
-### Administrator vs Guest
+- Users who join the **administrator** URL will have full whiteboard
+  privileges.
+- Users who join the **guest** URL will have restricted whiteboard privileges.
 
-Each paper contains 2 URLs, one for **administrator** and one for **guest**.
+A paper can have more than 1 administrator or guest. If you redirect
+2 users using either the `url.admin` or `url.guest` both would have the same
+whiteboard privileges.
 
-- The administrator has full privileges on the paper (i.e can lock the paper).
-- The guest on the other hand has limited privileges. They cannot lock the
-  paper.
+<aside class="notice">
+  At the moment the only privilege an admin has is the ability to lock a paper
+  (i.e stop guests from interacting with or editing it). We will be adding
+  further privileges and restrictions to papers over time.
+</aside>
 
 ### Give names to your users
 
@@ -215,18 +220,6 @@ parameter to the URL like so:
 
 `https://bitpaper.io/go/Hello%20World/xdXfoI?access-token=foo&user_name=John%20Doe`
 
-<aside class="notice">
-  A paper can have more than 1 administrator. If you redirect 2 users using the
-  `url.admin` URL, both of them would be able to perform top-level admin actions
-  on the paper.
-</aside>
-
-<aside class="notice">
-  Test papers do not redirect to a working paper. They redirect to a page
-  indicating whether you redirected to the correct URL. Papers created with
-  the production API token will actually redirect to a working collaborative
-  paper instance.
-</aside>
 
 ## Delete a Paper
 
@@ -238,8 +231,8 @@ curl "https://api.bitpaper.io/public/api/v1/paper/ddc95912-2a81-a25e-b589-8de1d4
 
 > Responds with HTTP 204 if successful or an HTTP error otherwise.
 
-Deletes a specific paper. The data of the paper is deleted and it's link
-is made permanently inaccessible.
+Deletes a specific paper. The content of the paper is permanently deleted and
+it's URL is made permanently inaccessible.
 
 ### HTTP Request
 
@@ -289,12 +282,9 @@ third-party whiteboard.
 </iframe>
 ```
 
-You can embed Bitpaper in a page within your site by using an `<iframe>`.
-This allows you to display Bitpaper to your users in a page which is rendered
-in your own domain.
-
-Ideally you would embed the iframe on a path within your website that accepts
-the `name` and the `id` of the Paper as URL parts so it can be shared easily.
+Bitpaper can be embedded into your website using an `<iframe>`.
+This allows you to display papers to your users in a webpage that is rendered
+on your own domain.
 
 The `src` of the iframe can be set to either of the URLs returned in your
 created paper.
