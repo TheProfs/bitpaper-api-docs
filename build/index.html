@@ -425,7 +425,7 @@ looks like this:</p>
   Do not share your API tokens with anyone. The API tokens are used to uniquely
   identify you when using the Bitpaper API. If your tokens become compromised
   for any reason you can cycle them from your
-  [Enterprise Account settings](http://bitpaper.io/account#api)
+  [API settings](http://bitpaper.io/account#api)
   but you would need to use the new tokens in any future API request.
 </aside>
 <h2 id='test-mode'>Test Mode</h2>
@@ -463,7 +463,7 @@ functionality including audio/video calls and screensharing.</p>
 
 <p>You can control whether users have access to the paid audio/video calls and
 screensharing features using the Calls toggle in your
-<a href="http://bitpaper.io/account">account settings</a>.</p>
+<a href="http://bitpaper.io/account#call-settings">Call Settings</a>.</p>
 
 <p>API created Bitpapers do not display any references to the Bitpaper brand such
 as our logo or brand name.</p>
@@ -512,7 +512,7 @@ the created paper.</p>
 </tr>
 </tbody></table>
 <h3 id='response'>Response</h3>
-<p>Responds with <code>HTTP 200</code> if successful.</p>
+<p>Responds with <code>HTTP 201</code> if successful.</p>
 
 <table><thead>
 <tr>
@@ -659,6 +659,10 @@ created paper.</p>
 <tr>
 <td><strong>200</strong></td>
 <td><strong>OK</strong> - Your request has succeeded and has response data.</td>
+</tr>
+<tr>
+<td><strong>201</strong></td>
+<td><strong>OK</strong> - Your request has succeeded and has led to the creation of the resource.</td>
 </tr>
 <tr>
 <td><strong>400</strong></td>

@@ -5,6 +5,7 @@ The Bitpaper API uses the following HTTP status codes:
 Code | Meaning
 ---------- | -------
 **200** | **OK** - Your request has succeeded and has response data.
+**201** | **OK** - Your request has succeeded and has led to the creation of the resource.
 **400** | **No Content** - Your request has succeeded and has no response data.
 **400** | **Bad Request** - Your request is invalid.
 **401** | **Unauthorised** - Bad authorisation header. The header is not formatted correctly or the API token is invalid or revoked

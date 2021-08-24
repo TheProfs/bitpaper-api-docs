@@ -80,7 +80,7 @@ looks like this:
   Do not share your API tokens with anyone. The API tokens are used to uniquely
   identify you when using the Bitpaper API. If your tokens become compromised
   for any reason you can cycle them from your
-  [Enterprise Account settings](http://bitpaper.io/account#api)
+  [API settings](http://bitpaper.io/account#api)
   but you would need to use the new tokens in any future API request.
 </aside>
 
@@ -122,7 +122,7 @@ functionality including audio/video calls and screensharing.
 
 You can control whether users have access to the paid audio/video calls and
 screensharing features using the Calls toggle in your
-[account settings](http://bitpaper.io/account).
+[Call Settings](http://bitpaper.io/account#call-settings).
 
 API created Bitpapers do not display any references to the Bitpaper brand such
 as our logo or brand name.
@@ -173,7 +173,7 @@ Parameter | Type | Description
 
 ### Response
 
-Responds with `HTTP 200` if successful.
+Responds with `HTTP 201` if successful.
 
 Parameter | Description
 --------- | -----------
