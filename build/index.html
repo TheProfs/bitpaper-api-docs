@@ -403,9 +403,9 @@ that show up as HTTP status code <code>429</code>.</p>
 
 <p><a href='https://bitpaper.io/contact'>Contact us</a> if you need to increase
 this limit.</p>
-<h2 id='authentication'>Authentication</h2><div class="highlight"><pre class="highlight shell tab-shell"><code><span class="c"># An example of an authorised API call</span>
+<h2 id='authentication'>Authentication</h2><div class="highlight"><pre class="highlight shell tab-shell"><code><span class="c"># An example of an authorized API call</span>
 curl <span class="s2">"&lt;api-endpoint-here&gt;"</span> <span class="se">\</span>
-  <span class="nt">-H</span> <span class="s2">"Authorisation: Bearer &lt;my-secret-api-token&gt;"</span>
+  <span class="nt">-H</span> <span class="s2">"Authorization: Bearer &lt;my-secret-api-token&gt;"</span>
 </code></pre></div>
 <blockquote>
 <p>Make sure to replace <code>&lt;my-secret-api-token&gt;</code> with your actual API token.</p>
@@ -419,7 +419,7 @@ curl <span class="s2">"&lt;api-endpoint-here&gt;"</span> <span class="se">\</spa
 <p>Bitpaper requires your API token included in all API requests in a header that
 looks like this:</p>
 
-<p><code>Authorisation: Bearer &lt;my-secret-api-token&gt;</code></p>
+<p><code>Authorization: Bearer &lt;my-secret-api-token&gt;</code></p>
 
 <aside class="warning">
   Do not share your API tokens with anyone. The API tokens are used to uniquely
@@ -473,7 +473,7 @@ as our logo or brand name.</p>
 <h2 id='create-a-paper'>Create a Paper</h2><div class="highlight"><pre class="highlight shell tab-shell"><code>curl <span class="s2">"https://api.bitpaper.io/public/api/v1/paper"</span> <span class="se">\</span>
 <span class="nt">-X</span> POST <span class="se">\</span>
 <span class="nt">-H</span> <span class="s2">"Content-Type: application/json"</span> <span class="se">\</span>
-<span class="nt">-H</span> <span class="s2">"Authorisation: Bearer &lt;my-secret-api-token&gt;"</span> <span class="se">\</span>
+<span class="nt">-H</span> <span class="s2">"Authorization: Bearer &lt;my-secret-api-token&gt;"</span> <span class="se">\</span>
 <span class="nt">--data</span> <span class="s1">'{"name":"Maths"}'</span>
 </code></pre></div>
 <blockquote>
@@ -584,7 +584,7 @@ parameter to the URL like so:</p>
 <p><code>https://bitpaper.io/go/Hello%20World/xdXfoI?access-token=foo&amp;user_name=John%20Doe</code></p>
 <h2 id='delete-a-paper'>Delete a Paper</h2><div class="highlight"><pre class="highlight shell tab-shell"><code>curl <span class="s2">"https://api.bitpaper.io/public/api/v1/paper/ddc95912-2a81-a25e-b589-8de1d472f6e8"</span> <span class="se">\</span>
   <span class="nt">-X</span> DELETE <span class="se">\</span>
-  <span class="nt">-H</span> <span class="s2">"Authorisation: Bearer &lt;my-secret-api-token&gt;"</span>
+  <span class="nt">-H</span> <span class="s2">"Authorization: Bearer &lt;my-secret-api-token&gt;"</span>
 </code></pre></div>
 <blockquote>
 <p>Responds with HTTP 204 if successful or an HTTP error otherwise.</p>

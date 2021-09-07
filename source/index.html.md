@@ -59,9 +59,9 @@ this limit.
 ## Authentication
 
 ```shell
-# An example of an authorised API call
+# An example of an authorized API call
 curl "<api-endpoint-here>" \
-  -H "Authorisation: Bearer <my-secret-api-token>"
+  -H "Authorization: Bearer <my-secret-api-token>"
 ```
 
 > Make sure to replace `<my-secret-api-token>` with your actual API token.
@@ -74,7 +74,7 @@ You can view your API token in your Bitpaper
 Bitpaper requires your API token included in all API requests in a header that
 looks like this:
 
-`Authorisation: Bearer <my-secret-api-token>`
+`Authorization: Bearer <my-secret-api-token>`
 
 <aside class="warning">
   Do not share your API tokens with anyone. The API tokens are used to uniquely
@@ -136,7 +136,7 @@ To mask the URL you will need to follow the
 curl "https://api.bitpaper.io/public/api/v1/paper" \
 -X POST \
 -H "Content-Type: application/json" \
--H "Authorisation: Bearer <my-secret-api-token>" \
+-H "Authorization: Bearer <my-secret-api-token>" \
 --data '{"name":"Maths"}'
 ```
 
@@ -226,7 +226,7 @@ parameter to the URL like so:
 ```shell
 curl "https://api.bitpaper.io/public/api/v1/paper/ddc95912-2a81-a25e-b589-8de1d472f6e8" \
   -X DELETE \
-  -H "Authorisation: Bearer <my-secret-api-token>"
+  -H "Authorization: Bearer <my-secret-api-token>"
 ```
 
 > Responds with HTTP 204 if successful or an HTTP error otherwise.
