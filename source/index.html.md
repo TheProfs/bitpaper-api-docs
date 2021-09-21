@@ -27,6 +27,9 @@ Bitpaper in your website.
 
 You can view code examples in the dark area to the right.
 
+You can get full access to our REST API by subscribing to the 'Enterprise/API'
+plan on our <a href="https://bitpaper.io/pricing">Pricing</a> page
+
 ## Usage
 
 The Bitpaper API is organized around [REST](https://en.wikipedia.org/wiki/Representational_state_transfer).
