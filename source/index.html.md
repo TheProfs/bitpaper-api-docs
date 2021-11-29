@@ -291,8 +291,3 @@ on your own domain.
 
 The `src` of the iframe can be set to either of the URLs returned in your
 created paper.
-
-<aside class="notice">
-  <strong> Remember: </strong> Your site must be set as an origin in your
-  Bitpaper account settings to allow integrating via an iframe.
-</aside>
