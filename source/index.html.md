@@ -268,7 +268,7 @@ third-party whiteboard.
  -->
 <iframe
   src="https://bitpaper.io/go/Maths/xdXfoI?access-token=eyJhbGciO&user_name=John%20Doe"
-  allow="camera; microphone"
+  allow="camera; microphone; display-capture;"
   style="
     position: fixed;
     top: 0px;
