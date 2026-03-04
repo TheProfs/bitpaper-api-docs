@@ -1,0 +1,12 @@
+{
+  "name": "@theprofs/bitpaper-api-docs",
+  "version": "1.0.0",
+  "description": "Bitpaper API documentation",
+  "type": "module",
+  "exports": "./server.js",
+  "engines": { "node": ">=24" },
+  "scripts": {
+    "start": "node server.js"
+  },
+  "license": "MIT"
+}
