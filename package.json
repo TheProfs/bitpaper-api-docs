@@ -3,10 +3,14 @@
   "version": "1.0.0",
   "description": "Bitpaper API documentation",
   "type": "module",
-  "exports": "./server.js",
   "engines": { "node": ">=24" },
   "scripts": {
-    "start": "node server.js"
+    "start": "PORT=${PORT:-3007} node --title=bp-api-docs app.js",
+    "dev": "PORT=${PORT:-3007} node --title=bp-api-docs --watch --watch-path=app.js --watch-path=lib --watch-path=index.html --watch-path=assets app.js",
+    "test": "node --test '**/*.test.js'"
+  },
+  "imports": {
+    "#lib/*": "./lib/*/index.js"
   },
   "license": "MIT"
 }

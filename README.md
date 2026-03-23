@@ -1,54 +1,58 @@
-# Bitpaper API Docs
+# bitpaper-api-docs
 
-Bitpaper's public REST API docs, built using [Slate][slate].
+[![test](https://github.com/TheProfs/bitpaper-api-docs/actions/workflows/test.yml/badge.svg)][ci]
 
-## Install
+Static docs for the [Bitpaper REST API][site].
 
-Ensure you have all [system dependencies installed][slate-getting-started],
-clone this repository, cd into it and then:
-
-```bash
-$ gem update --system
-$ gem install bundler
-$ bundle install
-```
-
-## Usage
-
-## Run development server
+## Setup
 
 ```bash
-bundle exec middleman server
-# then visit http://192.168.10.1:4567
+npm run dev
 ```
 
-## Edit documentation
+Local development runs at `http://localhost:3007`.
+Override the port with `PORT=3017 npm run dev`.
 
-Simply edit `src/index.html.md`.
-More info on [Slate's][slate] homepage.
+## Authoring
 
-Some sections are `includes` found in `src/includes/`
+It's just a single file: `index.html`.
 
-## Deploy to production
+1. Read the [contribution guide][contrib]
+2. Edit `index.html` accordingly
+3. Push or merge to the default branch
+
+Changes deploy automatically to [developers.bitpaper.io][site].
+
+## Test
 
 ```bash
-# Build docs
-$ bundle exec middleman build
-
-# Push to main branch:
-$ git add --all
-$ git commit -am"Added POST/ user"
-$ git push origin main
+npm test
 ```
 
-Pushing to `main` branch automatically deploys on Heroku as
-[bitpaper-api-docs][heroku-bitpaper-api-docs],
-which is publicly accessible at https://developers.bitpaper.io
+## Lint
 
-[slate]:https://github.com/slatedocs/slate
-[slate-getting-started]:https://github.com/slatedocs/slate/wiki/Using-Slate-Natively
-[heroku-bitpaper-api-docs]:https://dashboard.heroku.com/apps/bitpaper-api-docs
+Deployments also trigger [lint.yml][lint],
+essentially [vale.sh][vale] prose checks.
 
-## Authors
+## Structure
 
-Bitpaper LTD
+```
+├── index.html   # documentation page
+├── app.js       # entry point
+├── assets/      # static files
+├── lib/
+│   └── server/  # HTTP server module
+└── test/        # smoke tests
+```
+
+Initial structure borrowed from [Slate][gh-slate].
+
+[MIT][mit] - Bitpaper LTD
+
+[ci]: https://github.com/TheProfs/bitpaper-api-docs/actions/workflows/test.yml
+[site]: https://developers.bitpaper.io
+[contrib]: ./.github/CONTRIBUTING.md
+[gh-slate]: https://github.com/slatedocs/slate
+[lint]: ./.github/workflows/lint.yml
+[vale]: https://vale.sh
+[mit]: https://opensource.org/licenses/MIT

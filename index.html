@@ -1,0 +1,1170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Bitpaper API</title>
+  <meta name="description" content="Developer documentation for the Bitpaper REST API">
+  <link rel="canonical" href="https://developers.bitpaper.io/">
+  <link rel="icon" href="https://fav.farm/🪜">
+
+  <meta property="og:title" content="Bitpaper API">
+  <meta property="og:description" content="Developer documentation for the Bitpaper REST API">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://developers.bitpaper.io/">
+  <meta property="og:image" content="https://developers.bitpaper.io/assets/og.webp">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+
+  <style>
+  :root {
+    color-scheme: light dark;
+    --ratio: 1.25;
+
+    --bg: light-dark(#ffffff, #1a1a1a);
+    --bg-nav: light-dark(#f6f8fa, #141414);
+    --aside-bg: light-dark(#fafafa, #161618);
+    --border: light-dark(#d1d9e0, #2a2a2e);
+
+    --text: light-dark(#333333, #a8b5b2);
+    --muted: light-dark(#656d76, #8b949e);
+    --accent: light-dark(#00bfa5, #1de9b6);
+    --tertiary: light-dark(#ffb300, #ffea00);
+    --warn-bdr: light-dark(#ffd600, #ffea00);
+    --info-bdr: light-dark(#00bfa5, #1de9b6);
+
+    --font-ui: system-ui, -apple-system, BlinkMacSystemFont,
+      "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    --font-prose: ui-serif, Georgia, Cambria,
+      "Times New Roman", Times, serif;
+    --font-mono: ui-monospace, "SF Mono", Menlo, Consolas,
+      "Liberation Mono", monospace;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; }
+  html { scrollbar-width: thin; }
+
+  @media (prefers-reduced-motion: no-preference) {
+    html { scroll-behavior: smooth; }
+  }
+
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-prose);
+    font-weight: 200;
+    font-size: 0.88rem;
+    letter-spacing: 0.01em;
+    line-height: 1.6;
+    display: grid;
+    grid-template-columns: 260px 1fr;
+
+    a {
+      color: var(--accent);
+      text-decoration: none;
+      &:hover { color: var(--tertiary); }
+      &:focus-visible {
+        outline: 2px solid var(--accent);
+        outline-offset: 2px;
+      }
+    }
+
+    code {
+      font-family: var(--font-mono);
+      font-size: 0.82em;
+      color: light-dark(#1a1a1a, #e0e0e0);
+      background: none;
+      padding: 0;
+      overflow-wrap: anywhere;
+    }
+  }
+
+  body > nav {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow-y: auto;
+    background: var(--bg-nav);
+    box-shadow: 2px 0 8px light-dark(rgba(0,0,0,.06), rgba(0,0,0,.3));
+    padding: 1.5rem 1rem;
+    font-family: var(--font-ui);
+    font-size: 0.82rem;
+
+    > strong {
+      display: block;
+      font-size: 1rem;
+      font-weight: 300;
+      margin-bottom: 1rem;
+
+      a {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+        color: var(--text);
+      }
+    }
+
+    .search {
+      position: relative;
+      margin-bottom: 1rem;
+
+      svg {
+        position: absolute;
+        left: 0.5rem;
+        top: 50%;
+        translate: 0 -50%;
+        width: 14px;
+        height: 14px;
+        color: var(--muted);
+        pointer-events: none;
+      }
+    }
+
+    input[type="search"] {
+      width: 100%;
+      padding: 0.4rem 0.6rem 0.4rem 1.75rem;
+      border: none;
+      border-radius: 2px;
+      background: var(--bg);
+      color: var(--text);
+      font-family: inherit;
+      font-size: 0.75rem;
+      &::placeholder {
+        color: var(--muted);
+        opacity: 0.5;
+        font-weight: 200;
+      }
+      &:focus {
+        outline: 2px solid var(--accent);
+        outline-offset: -1px;
+      }
+    }
+
+    ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+
+      ul {
+        padding-left: 0.9rem;
+        margin: 0.15rem 0;
+      }
+    }
+
+    li a {
+      display: block;
+      padding: 0.25rem 0.5rem;
+      border-radius: 2px;
+      color: var(--muted);
+      border-left: 2px solid transparent;
+      transition: color 0.15s, border-left-color 0.15s;
+
+      &:hover { color: var(--text); }
+      &[aria-current] {
+        color: var(--accent);
+        border-left-color: transparent;
+        background: none;
+      }
+    }
+
+    li li a {
+      font-size: 0.78rem;
+      padding: 0.15rem 0.5rem;
+    }
+
+    > footer {
+      margin-top: 1.5rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+      font-size: 0.78rem;
+
+      a {
+        display: block;
+        padding: 0.2rem 0;
+        color: var(--muted);
+        &:hover { color: var(--accent); }
+      }
+    }
+  }
+
+  body > main {
+    max-width: 80ch;
+    padding: 2rem 2rem 4rem;
+
+    h1, h2, h3 {
+      font-family: var(--font-ui);
+      font-weight: 200;
+      line-height: 1.25;
+      text-wrap: balance;
+      scroll-margin-top: 1rem;
+      color: var(--text);
+      border-left: 2px solid transparent;
+      padding-left: 0.6rem;
+      margin-left: -0.6rem;
+
+      &:has(svg) {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+      }
+    }
+
+    h1 {
+      font-size: calc(1rem * pow(var(--ratio), 2));
+      margin-top: 3rem;
+      padding-bottom: 0.3em;
+      border-bottom: 1px solid var(--border);
+    }
+    h2 {
+      font-size: calc(1rem * var(--ratio));
+      margin-top: 2.5rem;
+    }
+    h3 {
+      font-size: 1rem;
+      margin-top: 1.5rem;
+    }
+
+    h1:first-child { margin-top: 0; }
+    p { text-wrap: pretty; }
+
+    blockquote {
+      margin: 1rem 0;
+      padding: 0.5rem 1rem;
+      border-left: 3px solid var(--border);
+      color: var(--muted);
+      font-style: italic;
+
+      p { margin: 0; }
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1rem 0;
+      font-size: 0.85rem;
+      font-family: var(--font-ui);
+
+      th, td {
+        text-align: left;
+        padding: 0.5rem 0.75rem;
+        border: none;
+        border-bottom: 1px solid var(--border);
+      }
+
+      th { font-weight: 600; }
+    }
+
+    aside {
+      margin: 1.25rem 0;
+      padding: 1rem 1.25rem;
+      border-radius: 2px;
+      font-size: 0.85rem;
+      font-family: var(--font-ui);
+      background: var(--aside-bg);
+      border: none;
+      border-left: 2px solid var(--info-bdr);
+      box-shadow: 0 1px 3px light-dark(
+        rgba(0, 0, 0, .08), rgba(0, 0, 0, .3));
+
+      &[data-warn] {
+        border-left-color: var(--warn-bdr);
+      }
+    }
+
+    ul, ol {
+      padding-left: 1.5rem;
+
+      li + li { margin-top: 0.25rem; }
+    }
+  }
+
+  @media (max-width: 768px) {
+    body { grid-template-columns: 1fr; }
+
+    body > nav {
+      position: static;
+      height: auto;
+      border-bottom: 1px solid var(--border);
+      max-height: 50vh;
+    }
+
+    body > main { padding: 1.5rem 1rem; }
+
+    body > main table {
+      display: block;
+      overflow-x: auto;
+    }
+  }
+
+  :target {
+    border-left-color: #1de9b6;
+  }
+
+  @media print {
+    body { display: block; }
+    body > nav { display: none; }
+    body > main { max-width: none; padding: 1rem; }
+  }
+  </style>
+</head>
+<body>
+  <nav>
+    <strong><a href="#introduction"><svg aria-hidden="true" focusable="false" width="16" height="16" viewBox="0 0 7.3466 10.4668" fill="currentColor"><path d="M3.17115 1.39102L3.63416 1.39102L3.63416 0.228575C3.63416 0.10125 3.53291 0 3.40377 0C3.27645 0 3.17115 0.105293 3.17115 0.232618ZM3.40377 3.70371C4.16695 3.70371 4.76971 3.09914 4.76971 2.33777C4.76971 1.57641 4.16695 0.971836 3.40377 0.971836C2.6424 0.971836 2.03783 1.57641 2.03783 2.33777C2.03783 3.09914 2.6424 3.70371 3.40377 3.70371ZM3.40377 3.09293C2.97346 3.09293 2.64861 2.7699 2.64861 2.33777C2.64861 1.90565 2.97346 1.58262 3.40377 1.58262C3.8359 1.58262 4.15893 1.90565 4.15893 2.33777C4.15893 2.7699 3.8359 3.09293 3.40377 3.09293ZM3.18059 3.36522L2.54514 3.20777L0.738926 9.25846C0.684961 9.42621 0.791075 9.61014 0.968731 9.65197C1.13871 9.70371 1.31637 9.60205 1.36447 9.42398ZM0.916173 9.03228L0.608379 10.1746C0.576445 10.2865 0.63668 10.3989 0.750879 10.4309C0.866895 10.4628 0.979278 10.3967 1.01121 10.2825L1.32305 9.14426ZM3.62695 3.36522L5.43902 9.42398C5.49299 9.60205 5.66479 9.70371 5.84063 9.65197C6.01242 9.61014 6.12035 9.42621 6.07043 9.25846L4.26018 3.20777ZM5.89137 9.03228L5.48449 9.14426L5.79633 10.2825C5.82826 10.3967 5.94246 10.4628 6.05666 10.4309C6.17268 10.3989 6.22928 10.2865 6.19916 10.1746ZM0.269004 5.91727C0.121465 5.91727 0 6.03692 0 6.18223C0 6.33158 0.121465 6.45123 0.269004 6.45123L6.53854 6.45123C6.68789 6.45123 6.80754 6.33158 6.80754 6.18223C6.80754 6.03692 6.68789 5.91727 6.53854 5.91727ZM3.67277 5.39121C3.67277 5.2459 3.55313 5.12625 3.40377 5.12625C3.25623 5.12625 3.13477 5.2459 3.13477 5.39121L3.13477 6.97324C3.13477 7.1226 3.25623 7.24225 3.40377 7.24225C3.55313 7.24225 3.67277 7.1226 3.67277 6.97324Z"/></svg> Bitpaper API</a></strong>
+    <div class="search">
+      <svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input type="search" id="toc-search" aria-label="Search table of contents" placeholder="Search...">
+    </div>
+    <ul id="toc">
+      <li>
+        <a href="#introduction">Introduction</a>
+        <ul>
+          <li><a href="#usage">Usage</a></li>
+          <li><a href="#rate-limiting">Rate Limiting</a></li>
+          <li><a href="#authentication">Authentication</a></li>
+          <li><a href="#test-mode">Test Mode</a></li>
+        </ul>
+      </li>
+
+      <li>
+        <a href="#papers">Papers</a>
+        <ul>
+          <li><a href="#api-papers">API Papers</a></li>
+          <li><a href="#create-a-paper">Create a Paper</a></li>
+          <li><a href="#access-a-paper">Access a Paper</a></li>
+          <li><a href="#get-a-paper">Get a Paper</a></li>
+          <li><a href="#duplicate-a-paper">Duplicate a Paper</a></li>
+          <li><a href="#delete-a-paper">Delete a Paper</a></li>
+        </ul>
+      </li>
+
+      <li>
+        <a href="#whitelabelling">Whitelabelling</a>
+        <ul>
+          <li><a href="#use-your-own-domain">Use your own domain</a></li>
+        </ul>
+      </li>
+
+      <li><a href="#status-codes">Status Codes</a></li>
+
+      <li>
+        <a href="#changelog">Changelog</a>
+        <ul>
+          <li><a href="#v1-0-0">v1.0.0</a></li>
+        </ul>
+      </li>
+    </ul>
+    <footer>
+      <a href="https://bitpaper.io/account#api">Get your API token</a>
+      <a href="https://bitpaper.io">Back to Bitpaper</a>
+    </footer>
+  </nav>
+
+  <main>
+    <h1 id="introduction"><svg aria-hidden="true" focusable="false" width="18" height="18" viewBox="0 0 11.5478 10.3304" fill="currentColor"><path d="M0 9.09457C0 9.74449 0.311426 10.0727 0.970021 10.0727L7.18776 10.0727C7.84049 10.0727 8.15192 9.74449 8.15192 9.09457L8.15192 0.974064C8.15192 0.326368 7.84049 0 7.18776 0L6.27071 0C5.61211 0 5.30068 0.326368 5.30068 0.974064L5.30068 2.83424C5.19885 2.7999 5.08166 2.78274 4.94953 2.78274L2.94322 2.78274C2.80301 2.78274 2.68582 2.7999 2.58803 2.83424L2.58803 2.19879C2.58803 1.5511 2.27256 1.22473 1.62205 1.22473L0.970021 1.22473C0.311426 1.22473 0 1.5511 0 2.19879ZM0.614826 9.04646L0.614826 2.24508C0.614826 1.97555 0.748595 1.83551 1.03026 1.83551L1.55373 1.83551C1.83943 1.83551 1.9732 1.97555 1.9732 2.24508L1.9732 9.45785L1.03026 9.45785C0.748595 9.45785 0.614826 9.32004 0.614826 9.04646ZM2.58803 9.45785L2.58803 3.8049C2.58803 3.53537 2.7218 3.39756 3.00346 3.39756L4.88525 3.39756C5.17096 3.39756 5.30068 3.53537 5.30068 3.8049L5.30068 9.45785ZM5.91551 9.45785L5.91551 1.02217C5.91551 0.752638 6.05332 0.610783 6.33498 0.610783L7.12348 0.610783C7.40918 0.610783 7.53891 0.752638 7.53891 1.02217L7.53891 9.04646C7.53891 9.32004 7.40918 9.45785 7.12348 9.45785ZM3.02197 4.27448C3.02197 4.41979 3.13131 4.53135 3.28248 4.53135L4.61432 4.53135C4.76145 4.53135 4.87078 4.41979 4.87078 4.27448C4.87078 4.13321 4.76145 4.02569 4.61432 4.02569L3.28248 4.02569C3.13131 4.02569 3.02197 4.13321 3.02197 4.27448ZM3.02197 8.57689C3.02197 8.72221 3.13131 8.83377 3.28248 8.83377L4.61432 8.83377C4.76145 8.83377 4.87078 8.72221 4.87078 8.57689C4.87078 8.43744 4.76145 8.3281 4.61432 8.3281L3.28248 8.3281C3.13131 8.3281 3.02197 8.43744 3.02197 8.57689ZM8.56793 9.21885C8.64756 9.85887 8.98688 10.1636 9.63739 10.0737L10.1463 10.0169C10.8008 9.92514 11.0664 9.58119 10.9948 8.93754L10.2377 2.05201C10.1661 1.4124 9.82096 1.1018 9.16641 1.19355L8.65934 1.25619C8.00075 1.34572 7.73116 1.68785 7.80492 2.33373ZM9.16881 9.09475L8.42379 2.30766C8.39227 2.03813 8.51209 1.89264 8.79375 1.85303L9.17409 1.80838C9.45575 1.76877 9.60346 1.90477 9.63498 2.16844L10.38 8.95734C10.4115 9.23092 10.2935 9.37459 10.0159 9.4142L9.62749 9.45885C9.34987 9.49846 9.20034 9.36832 9.16881 9.09475Z"/></svg> Introduction</h1>
+
+    <p>Welcome to the Bitpaper API!</p>
+
+    <p>The following guide explains how you can create and manage papers
+    programmatically using a REST API and how to integrate
+    Bitpaper in your website.</p>
+
+    <p>You can view code examples alongside each section.</p>
+
+    <p>You can get full access to the REST API by subscribing to the
+    &lsquo;Enterprise/API&rsquo; plan on the
+    <a href="https://bitpaper.io/pricing">Pricing</a> page.</p>
+
+    <h2 id="usage">Usage</h2>
+
+    <p>The Bitpaper API is organized around
+    <a href="https://en.wikipedia.org/wiki/Representational_state_transfer">REST</a>.</p>
+
+    <p>It uses predictable resource-oriented URLs, accepts
+    <a href="https://en.wikipedia.org/wiki/JSON">JSON</a>-encoded request
+    bodies, returns JSON-encoded responses and uses standard
+    <a href="https://en.wikipedia.org/wiki/List_of_HTTP_status_codes">HTTP response codes</a>,
+    authentication and verbs.</p>
+
+    <ul>
+      <li>All requests <em>must</em> be made via
+        <a href="https://en.wikipedia.org/wiki/HTTPS">HTTPS</a>.</li>
+      <li>Requests which require a request body use JSON,
+        so they <em>must</em> include a
+        <code>Content-Type: application/json</code> header.</li>
+    </ul>
+
+    <p>API versioning follows
+    <a href="https://semver.org/">Semantic Versioning</a>.</p>
+
+    <h2 id="rate-limiting"><svg aria-hidden="true" focusable="false" width="16" height="16" viewBox="0 0 9.82576 11.1986" fill="currentColor"><path d="M4.64133 10.2377C7.18172 10.2377 9.2867 8.13674 9.2867 5.59635C9.2867 3.05596 7.17768 0.955019 4.63729 0.955019C2.09912 0.955019 0 3.05596 0 5.59635C0 8.13674 2.10316 10.2377 4.64133 10.2377ZM4.64133 9.55412C2.4508 9.55412 0.689826 7.79092 0.689826 5.59635C0.689826 3.40178 2.44676 1.63858 4.63729 1.63858C6.83186 1.63858 8.59506 3.40178 8.5991 5.59635C8.60314 7.79092 6.8359 9.55412 4.64133 9.55412ZM4.1973 1.22701L5.08131 1.22701L5.08131 0.45797C5.08131 0.205137 4.88608 0 4.63729 0C4.39658 0 4.1973 0.205137 4.1973 0.45797ZM7.51441 2.2507L8.12942 2.87783L8.68553 2.31586C8.7791 2.22229 8.83488 2.09678 8.83488 1.98158C8.83488 1.75037 8.64774 1.56322 8.40885 1.56322C8.26939 1.56322 8.16996 1.60324 8.07234 1.69863Z"/><path d="M4.64133 6.29555C5.0267 6.29555 5.33104 5.98313 5.33104 5.60221C5.33104 5.32939 5.17705 5.09619 4.92428 4.97637L4.92428 2.59166C4.92428 2.43199 4.79877 2.3083 4.63729 2.3083C4.48348 2.3083 4.35797 2.43199 4.35797 2.59166L4.35797 4.97273C4.10924 5.0966 3.95162 5.3298 3.95162 5.60221C3.95162 5.98131 4.25596 6.29555 4.64133 6.29555Z"/></svg> Rate Limiting</h2>
+
+    <p>The Bitpaper API employs a
+    <a href="https://en.wikipedia.org/wiki/Rate_limiting">rate limiter</a>
+    to guard against bursts of incoming traffic and maximise stability.
+    Users who send too many requests in quick succession may see
+    <code>429</code> error responses.</p>
+
+    <p>All requests are limited to <strong>600 requests per hour</strong>.</p>
+
+    <p><a href="https://bitpaper.io/contact">Contact us</a> if you need
+    to increase this limit.</p>
+
+    <h2 id="authentication">Authentication</h2>
+
+    <code-block lang="shell"># An example of an authorized API call
+curl "&lt;api-endpoint-here&gt;" \
+  -H "Authorization: Bearer &lt;my-secret-api-token&gt;"</code-block>
+
+    <blockquote>
+      <p>Replace <code>&lt;my-secret-api-token&gt;</code> with your
+      actual API token.</p>
+    </blockquote>
+
+    <p>Bitpaper uses API tokens to allow access to the API.</p>
+
+    <p>You can view your API token in your Bitpaper
+    <a href="https://bitpaper.io/account#api">account</a>.</p>
+
+    <p>Include your API token in all requests as a header:</p>
+
+    <p><code>Authorization: Bearer &lt;my-secret-api-token&gt;</code></p>
+
+    <aside data-warn>
+      Do not share your API tokens. They uniquely identify you when
+      using the Bitpaper API. If your tokens become compromised you can
+      cycle them from your
+      <a href="https://bitpaper.io/account#api">API settings</a>,
+      but you will need to use the new tokens in all future requests.
+    </aside>
+
+    <h2 id="test-mode">Test Mode</h2>
+
+    <p>The API allows simulating requests using your test API token so
+    you can test without incurring paper creation charges.</p>
+
+    <p>Bitpaper provides 2 API tokens, found
+    <a href="https://bitpaper.io/account#api">here</a>:</p>
+
+    <ul>
+      <li><strong>Production API token</strong> &mdash; Creates functioning
+        papers and charges them to your account. Use this in production.</li>
+      <li><strong>Test API token</strong> &mdash; Creates non-functioning
+        papers which are not charged. Use this for testing.</li>
+    </ul>
+
+    <aside data-warn>
+      Always use your production API token for your live app.
+    </aside>
+
+    <h1 id="papers"><svg aria-hidden="true" focusable="false" width="18" height="18" viewBox="0 0 13.2198 9.28852" fill="currentColor"><path d="M1.70197 4.64133L1.71837 4.96652L0.313477 4.96652C0.143907 4.96652 0 4.8208 0 4.64496C0 4.47316 0.143907 4.3234 0.313477 4.3234L1.718 4.3234ZM10.3011 4.64133L10.2847 4.96652L2.40011 4.96652C2.38817 4.85988 2.38371 4.75113 2.38371 4.64133C2.38371 4.53398 2.38798 4.42764 2.39975 4.3234L10.285 4.3234ZM12.6807 4.64496C12.6807 4.8208 12.5368 4.96652 12.3673 4.96652L10.9682 4.96652C10.9808 4.86002 10.9846 4.75112 10.9846 4.64133C10.9846 4.53399 10.981 4.42751 10.9686 4.3234L12.3673 4.3234C12.5368 4.3234 12.6807 4.47316 12.6807 4.64496Z"/><path d="M6.3433 9.28266C8.90754 9.28266 10.9846 7.20557 10.9846 4.64133C10.9846 2.07709 8.90754 0 6.3433 0C3.77725 0 1.70197 2.07709 1.70197 4.64133C1.70197 7.20557 3.77725 9.28266 6.3433 9.28266ZM6.3433 8.5991C4.155 8.5991 2.38371 6.82963 2.38371 4.64133C2.38371 2.45303 4.155 0.683556 6.3433 0.683556C8.52979 0.683556 10.3011 2.45303 10.3011 4.64133C10.3011 6.82963 8.52979 8.5991 6.3433 8.5991Z"/></svg> Papers</h1>
+
+    <p>Papers are the primary resource in Bitpaper.</p>
+
+    <p>A Paper is a collaborative whiteboard instance accessible via
+    a unique and permanent URL.</p>
+
+    <p>Creating a paper programmatically returns URLs that users can
+    visit to join and collaborate on a whiteboard.</p>
+
+    <p>A paper can have up to 100 individual pages. Pages can be
+    created and switched using the page toolbar on the top-right.</p>
+
+    <h2 id="api-papers"><svg aria-hidden="true" focusable="false" width="16" height="16" viewBox="0 0 9.7994 10.2702" fill="currentColor"><path d="M8.79006 6.82523C9.12615 7.02229 9.26033 7.17486 9.26033 7.41029C9.26033 7.64391 9.12615 7.79649 8.79006 7.98949L5.1634 10.0978C4.9609 10.213 4.79983 10.2702 4.62926 10.2702C4.46051 10.2702 4.29943 10.213 4.09693 10.0978L0.470274 7.98949C0.13418 7.79649 0 7.64391 0 7.41029C0 7.17486 0.13418 7.02229 0.470274 6.82523L1.30956 6.33826L1.97715 6.72562L0.885236 7.35012C0.85676 7.36324 0.840002 7.37819 0.840002 7.41029C0.840002 7.43654 0.85676 7.45553 0.885236 7.46865L4.43971 9.50156C4.51266 9.54299 4.56621 9.56461 4.62926 9.56461C4.69231 9.56461 4.74768 9.54299 4.82063 9.50156L8.3751 7.46865C8.40357 7.45553 8.42033 7.43654 8.42033 7.41029C8.42033 7.37819 8.40357 7.36324 8.3751 7.35012L7.28318 6.72562L7.95078 6.33826Z"/><path d="M2.09239 4.51928L0.885236 5.20969C0.85676 5.22686 0.840002 5.2418 0.840002 5.26805C0.840002 5.29834 0.85676 5.31328 0.885236 5.32641L4.43971 7.36336C4.51266 7.40074 4.56621 7.42236 4.62926 7.42236C4.69231 7.42236 4.74768 7.40074 4.82063 7.36336L8.3751 5.32641C8.40357 5.31328 8.42033 5.29834 8.42033 5.26805C8.42033 5.2418 8.40357 5.22686 8.3751 5.20969L7.16794 4.51928L7.83403 4.1328L8.79006 4.68703C9.12615 4.88186 9.26033 5.03262 9.26033 5.26805C9.26033 5.50166 9.12615 5.65424 8.79006 5.85129L5.1634 7.95557C4.9609 8.07258 4.79983 8.12977 4.62926 8.12977C4.46051 8.12977 4.29943 8.07258 4.09693 7.95557L0.470274 5.85129C0.13418 5.65424 0 5.50166 0 5.26805C0 5.03262 0.13418 4.88186 0.470274 4.68703L1.4263 4.1328Z"/><path d="M4.62926 5.85475C4.79983 5.85475 4.9609 5.79756 5.1634 5.68237L8.79006 3.57809C9.12615 3.38104 9.26033 3.22846 9.26033 2.99485C9.26033 2.76346 9.12615 2.60684 8.79006 2.41383L5.1634 0.309552C4.9609 0.190314 4.79983 0.137169 4.62926 0.137169C4.46051 0.137169 4.29943 0.190314 4.09693 0.309552L0.470274 2.41383C0.13418 2.60684 0 2.76346 0 2.99485C0 3.22846 0.13418 3.38104 0.470274 3.57809L4.09693 5.68237C4.29943 5.79756 4.46051 5.85475 4.62926 5.85475Z"/></svg> API Papers</h2>
+
+    <p>By default, API-created papers have the full set of whiteboard
+    tools including audio/video calls and screensharing.</p>
+
+    <p>You can control access to paid call features using the Calls
+    toggle in your
+    <a href="https://bitpaper.io/account#call-settings">Call Settings</a>.</p>
+
+    <p>API-created papers do not display any Bitpaper branding.</p>
+
+    <p>To mask the URL, follow the
+    <a href="#whitelabelling">Whitelabelling</a> guide below.</p>
+
+    <h2 id="create-a-paper"><svg aria-hidden="true" focusable="false" width="16" height="16" viewBox="0 0 8.04287 7.51371" fill="currentColor"><path d="M4.11188 7.14586L4.11188 0.361993C4.11188 0.168164 3.94998 0 3.75393 0C3.55787 0 3.39193 0.168164 3.39193 0.361993L3.39193 7.14586C3.39193 7.33969 3.55787 7.50785 3.75393 7.50785C3.94998 7.50785 4.11188 7.33969 4.11188 7.14586ZM0.361993 4.11592L7.14586 4.11592C7.33969 4.11592 7.50381 3.94998 7.50381 3.75393C7.50381 3.55787 7.33969 3.39193 7.14586 3.39193L0.361993 3.39193C0.164122 3.39193 0 3.55787 0 3.75393C0 3.94998 0.164122 4.11592 0.361993 4.11592Z"/></svg> Create a Paper</h2>
+
+    <code-block lang="shell">curl "https://api.bitpaper.io/public/api/v1/paper" \
+  -X POST \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer &lt;my-secret-api-token&gt;" \
+  --data '{"name":"Maths"}'</code-block>
+
+    <blockquote>
+      <p>Returns JSON structured like this:</p>
+    </blockquote>
+
+    <code-block lang="json">{
+  "id_saved_paper": "ddc95912-2a81-a25e-b589-8de1d472f6e8",
+  "name": "Maths",
+  "created_at": "2021-01-01T01:00:00.000Z",
+  "is_test_paper": false,
+  "urls": {
+    "admin": "https://bitpaper.io/go/Maths/xdXfoI?access-token=eyJhbGciO",
+    "guest": "https://bitpaper.io/go/Maths/xdXfoI?access-token=iJIUzI9.e"
+  }
+}</code-block>
+
+    <p>Creates a paper and returns the paper information and URLs
+    which can be used to access it.</p>
+
+    <p>Visiting any of the URLs in the response takes you directly
+    to the created paper.</p>
+
+    <h3 id="create-http-request">HTTP Request</h3>
+
+    <p><code>POST https://api.bitpaper.io/public/api/v1/paper</code></p>
+
+    <h3 id="body-parameters">Body Parameters</h3>
+
+    <table>
+      <thead>
+        <tr><th>Parameter</th><th>Type</th><th>Description</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code>name</code></td>
+          <td><code>String</code> (URL-safe, 4&ndash;64 chars)</td>
+          <td>A name for the paper. Does not have to be unique.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3 id="create-response">Response</h3>
+
+    <p>Responds with <code>HTTP 201</code> if successful.</p>
+
+    <table>
+      <thead>
+        <tr><th>Parameter</th><th>Description</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code>id_saved_paper</code></td>
+          <td><code>String</code> (36 chars) &mdash; Unique paper identifier</td>
+        </tr>
+        <tr>
+          <td><code>name</code></td>
+          <td><code>String</code> (URL-safe, 4&ndash;64 chars)</td>
+        </tr>
+        <tr>
+          <td><code>is_test_paper</code></td>
+          <td><code>Boolean</code> &mdash; <code>true</code> if created with test token</td>
+        </tr>
+        <tr>
+          <td><code>created_at</code></td>
+          <td><code>String</code> &mdash; ISO 8601 timestamp</td>
+        </tr>
+        <tr>
+          <td><code>urls</code></td>
+          <td><code>Object</code> &mdash; Access URLs for the paper</td>
+        </tr>
+        <tr>
+          <td><code>urls.admin</code></td>
+          <td><code>String</code> &mdash; Administrator access URL</td>
+        </tr>
+        <tr>
+          <td><code>urls.guest</code></td>
+          <td><code>String</code> &mdash; Guest access URL</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <aside>
+      <code>id_saved_paper</code> is a randomly-generated, unique and
+      permanent identifier. You can safely store this in your system
+      to match a paper to a user or class.
+    </aside>
+
+    <h2 id="access-a-paper">Access a Paper</h2>
+
+    <p>Created papers contain 2 URLs:</p>
+
+    <ul>
+      <li><strong>Administrator</strong> URL &mdash; full whiteboard
+        privileges.</li>
+      <li><strong>Guest</strong> URL &mdash; restricted whiteboard
+        privileges.</li>
+    </ul>
+
+    <p>A paper can have more than one administrator or guest.
+    Redirecting 2 users via <code>urls.admin</code> or
+    <code>urls.guest</code> gives both the same privileges.</p>
+
+    <aside>
+      Currently the only admin privilege is the ability to lock a paper
+      (preventing guests from editing). More privileges will be
+      added over time.
+    </aside>
+
+    <h3 id="give-names-to-your-users">Give names to your users</h3>
+
+    <p>Papers display user names in features like chat. To assign a
+    name, append a <code>user_name</code> query parameter:</p>
+
+    <p><code>https://bitpaper.io/go/Hello%20World/xdXfoI?access-token=foo&amp;user_name=John%20Doe</code></p>
+
+    <h2 id="get-a-paper"><svg aria-hidden="true" focusable="false" width="16" height="10" viewBox="0 0 16 10" fill="currentColor"><path d="M8 0C4.4 0 1.3 2.2 0 5c1.3 2.8 4.4 5 8 5s6.7-2.2 8-5C14.7 2.2 11.6 0 8 0zm0 8.3c-1.8 0-3.3-1.5-3.3-3.3S6.2 1.7 8 1.7s3.3 1.5 3.3 3.3S9.8 8.3 8 8.3zm0-5.3C6.9 3 6 3.9 6 5s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg> Get a Paper</h2>
+
+    <code-block lang="shell">curl "https://api.bitpaper.io/public/api/v1/paper/ddc95912-2a81-a25e-b589-8de1d472f6e8" \
+  -H "Authorization: Bearer &lt;my-secret-api-token&gt;"</code-block>
+
+    <blockquote>
+      <p>Returns JSON structured like this:</p>
+    </blockquote>
+
+    <code-block lang="json">{
+  "id_saved_paper": "ddc95912-2a81-a25e-b589-8de1d472f6e8",
+  "name": "Maths",
+  "status": "active",
+  "created_at": "2021-01-01T01:00:00.000Z",
+  "is_test_paper": false
+}</code-block>
+
+    <p>Retrieves information about a specific paper, including its
+    current status.</p>
+
+    <h3 id="get-http-request">HTTP Request</h3>
+
+    <p><code>GET https://api.bitpaper.io/public/api/v1/paper/&lt;id_saved_paper&gt;</code></p>
+
+    <h3 id="get-url-parameters">URL Parameters</h3>
+
+    <table>
+      <thead>
+        <tr><th>Parameter</th><th>Description</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code>id_saved_paper</code></td>
+          <td><code>String</code> (UUID) &mdash; The paper identifier</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3 id="get-response">Response</h3>
+
+    <p>Responds with <code>HTTP 200</code> if successful.</p>
+
+    <table>
+      <thead>
+        <tr><th>Parameter</th><th>Description</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code>id_saved_paper</code></td>
+          <td><code>String</code> (36 chars) &mdash; Unique paper
+            identifier</td>
+        </tr>
+        <tr>
+          <td><code>name</code></td>
+          <td><code>String</code> &mdash; Paper name</td>
+        </tr>
+        <tr>
+          <td><code>status</code></td>
+          <td><code>String</code> &mdash; <code>active</code>,
+            <code>INFLIGHT</code>, or <code>FAILED</code></td>
+        </tr>
+        <tr>
+          <td><code>is_test_paper</code></td>
+          <td><code>Boolean</code> &mdash; <code>true</code> if created
+            with test token</td>
+        </tr>
+        <tr>
+          <td><code>created_at</code></td>
+          <td><code>String</code> &mdash; ISO 8601 timestamp</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h2 id="duplicate-a-paper"><svg aria-hidden="true" focusable="false" width="14" height="16" viewBox="0 0 12 14" fill="currentColor"><path d="M3.5 0C2.4 0 1.5.9 1.5 2v7.5c0 1.1.9 2 2 2h5c1.1 0 2-.9 2-2V2c0-1.1-.9-2-2-2h-5zm0 1h5c.55 0 1 .45 1 1v7.5c0 .55-.45 1-1 1h-5c-.55 0-1-.45-1-1V2c0-.55.45-1 1-1zM0 3.5V12c0 1.1.9 2 2 2h5.5v-1H2c-.55 0-1-.45-1-1V3.5H0z"/></svg> Duplicate a Paper</h2>
+
+    <code-block lang="shell">curl "https://api.bitpaper.io/public/api/v1/paper/ddc95912-2a81-a25e-b589-8de1d472f6e8/copy" \
+  -X POST \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer &lt;my-secret-api-token&gt;" \
+  --data '{"name":"Maths (copy)"}'</code-block>
+
+    <blockquote>
+      <p>Returns JSON structured like this:</p>
+    </blockquote>
+
+    <code-block lang="json">{
+  "id_saved_paper": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+  "name": "Maths (copy)",
+  "status": "INFLIGHT",
+  "created_at": "2021-06-15T09:30:00.000Z",
+  "is_test_paper": false
+}</code-block>
+
+    <p>Duplicates an existing paper, including all content.
+    This is a fire-and-forget operation &mdash; the response
+    returns immediately while the copy runs in the background.</p>
+
+    <p>The new paper is returned with <code>status</code> set to
+    <code>INFLIGHT</code>. Poll <a href="#get-a-paper">Get a
+    Paper</a> with the new <code>id_saved_paper</code> until
+    <code>status</code> resolves to <code>active</code> or
+    <code>FAILED</code>.</p>
+
+    <h3 id="duplicate-http-request">HTTP Request</h3>
+
+    <p><code>POST https://api.bitpaper.io/public/api/v1/paper/&lt;id_saved_paper&gt;/copy</code></p>
+
+    <h3 id="duplicate-url-parameters">URL Parameters</h3>
+
+    <table>
+      <thead>
+        <tr><th>Parameter</th><th>Description</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code>id_saved_paper</code></td>
+          <td><code>String</code> (UUID) &mdash; The paper to
+            duplicate</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3 id="duplicate-body-parameters">Body Parameters</h3>
+
+    <table>
+      <thead>
+        <tr><th>Parameter</th><th>Type</th><th>Description</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code>name</code></td>
+          <td><code>String</code> (4&ndash;64 chars)</td>
+          <td>A name for the duplicate paper.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3 id="duplicate-response">Response</h3>
+
+    <p>Responds with <code>HTTP 201</code> if successful.</p>
+
+    <table>
+      <thead>
+        <tr><th>Parameter</th><th>Description</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code>id_saved_paper</code></td>
+          <td><code>String</code> (36 chars) &mdash; Unique identifier
+            of the new paper</td>
+        </tr>
+        <tr>
+          <td><code>name</code></td>
+          <td><code>String</code> &mdash; Name of the duplicate</td>
+        </tr>
+        <tr>
+          <td><code>status</code></td>
+          <td><code>String</code> &mdash; Initially
+            <code>INFLIGHT</code></td>
+        </tr>
+        <tr>
+          <td><code>is_test_paper</code></td>
+          <td><code>Boolean</code> &mdash; <code>true</code> if created
+            with test token</td>
+        </tr>
+        <tr>
+          <td><code>created_at</code></td>
+          <td><code>String</code> &mdash; ISO 8601 timestamp</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <aside>
+      Recommended polling interval is 2&ndash;5 seconds. The copy
+      duration depends on paper size.
+    </aside>
+
+    <h2 id="delete-a-paper"><svg aria-hidden="true" focusable="false" width="14" height="14" viewBox="0 0 9.37049 10.957" fill="currentColor"><path d="M3.05039 8.72063C3.20965 8.72063 3.30949 8.62119 3.30545 8.4777L3.15797 3.48047C3.15393 3.33293 3.04863 3.24117 2.90291 3.24117C2.74951 3.24117 2.64381 3.33697 2.64785 3.4841L2.79533 8.47951C2.79938 8.62705 2.90104 8.72063 3.05039 8.72063ZM4.41662 8.72063C4.57406 8.72063 4.67977 8.62301 4.67977 8.4777L4.67977 3.4841C4.67977 3.33879 4.57406 3.24117 4.41662 3.24117C4.261 3.24117 4.15348 3.33879 4.15348 3.4841L4.15348 8.4777C4.15348 8.62301 4.261 8.72063 4.41662 8.72063ZM5.78508 8.72426C5.93221 8.72426 6.03791 8.62887 6.04195 8.48133L6.18539 3.48592C6.18943 3.33879 6.08596 3.24299 5.93033 3.24299C5.78279 3.24299 5.6775 3.33879 5.67346 3.48229L5.53002 8.47951C5.52598 8.62301 5.62764 8.72426 5.78508 8.72426ZM2.42982 2.04586L3.07295 2.04586L3.07295 1.07057C3.07295 0.784923 3.26649 0.60674 3.56707 0.60674L5.26031 0.60674C5.55867 0.60674 5.75221 0.784923 5.75221 1.07057L5.75221 2.04586L6.39938 2.04586L6.39938 1.03014C6.39938 0.391407 5.98272 0 5.29711 0L3.52623 0C2.84648 0 2.42982 0.391407 2.42982 1.03014ZM0.303165 2.36742L8.53008 2.36742C8.69965 2.36742 8.83143 2.22979 8.83143 2.06203C8.83143 1.89065 8.69379 1.75664 8.53008 1.75664L0.303165 1.75664C0.143496 1.75664 0 1.89246 0 2.06203C0 2.2316 0.143496 2.36742 0.303165 2.36742ZM2.32682 10.1706L6.51047 10.1706C7.13326 10.1706 7.56809 9.75516 7.59961 9.13195L7.92973 2.2868L7.27711 2.2868L6.95689 9.06586C6.94336 9.35133 6.73307 9.5598 6.44801 9.5598L2.37756 9.5598C2.1024 9.5598 1.88807 9.34728 1.87453 9.06586L1.54037 2.28861L0.903515 2.28861L1.23949 9.136C1.27102 9.7592 1.69594 10.1706 2.32682 10.1706Z"/></svg> Delete a Paper</h2>
+
+    <code-block lang="shell">curl "https://api.bitpaper.io/public/api/v1/paper/ddc95912-2a81-a25e-b589-8de1d472f6e8" \
+  -X DELETE \
+  -H "Authorization: Bearer &lt;my-secret-api-token&gt;"</code-block>
+
+    <blockquote>
+      <p>Responds with <code>HTTP 204</code> if successful.</p>
+    </blockquote>
+
+    <p>Deletes a specific paper. The content is permanently deleted
+    and the URL becomes permanently inaccessible.</p>
+
+    <h3 id="delete-http-request">HTTP Request</h3>
+
+    <p><code>DELETE https://api.bitpaper.io/public/api/v1/paper/&lt;id_saved_paper&gt;</code></p>
+
+    <h3 id="url-parameters">URL Parameters</h3>
+
+    <table>
+      <thead>
+        <tr><th>Parameter</th><th>Description</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code>id_saved_paper</code></td>
+          <td><code>String</code> &mdash; The paper identifier to delete</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3 id="delete-response">Response</h3>
+
+    <p>Responds with <code>HTTP 204</code> if successful.</p>
+
+    <h1 id="whitelabelling">Whitelabelling</h1>
+
+    <p>Bitpaper allows embedding the whiteboard in your website,
+    under your own domain and without any Bitpaper branding.</p>
+
+    <p>This creates a seamless experience for your users without
+    any hints of using an external whiteboard.</p>
+
+    <h2 id="use-your-own-domain">Use your own domain</h2>
+
+    <code-block lang="html">&lt;!--
+  Embed this in your site on URL:
+  https://whiteboard.yourdomain.com/Maths/xdXfoI
+--&gt;
+&lt;iframe
+  src="https://bitpaper.io/go/Maths/xdXfoI?access-token=eyJhbGciO&amp;user_name=John%20Doe"
+  allow="camera; microphone; display-capture; clipboard-read; clipboard-write;"
+  style="
+    position: fixed;
+    top: 0px;
+    bottom: 0px;
+    right: 0px;
+    width: 100%;
+    border: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    z-index: 999999;
+    height: 100%;
+  "&gt;
+&lt;/iframe&gt;</code-block>
+
+    <p>Bitpaper can be embedded into your website using an
+    <code>&lt;iframe&gt;</code>. This displays papers to your users
+    in a webpage rendered on your own domain.</p>
+
+    <p>The <code>src</code> of the iframe can be set to either of the
+    URLs returned when creating a paper.</p>
+
+    <h1 id="status-codes">Status Codes</h1>
+
+    <p>The Bitpaper API uses the following HTTP status codes:</p>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Code</th>
+          <th>Meaning</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>200</strong></td>
+          <td><strong>OK</strong> &mdash; Request succeeded with response data.</td>
+        </tr>
+        <tr>
+          <td><strong>201</strong></td>
+          <td><strong>Created</strong> &mdash; Resource created successfully.</td>
+        </tr>
+        <tr>
+          <td><strong>204</strong></td>
+          <td><strong>No Content</strong> &mdash; Request succeeded, no response data.</td>
+        </tr>
+        <tr>
+          <td><strong>400</strong></td>
+          <td><strong>Bad Request</strong> &mdash; Request has validation errors.</td>
+        </tr>
+        <tr>
+          <td><strong>401</strong></td>
+          <td><strong>Unauthorized</strong> &mdash; Invalid or revoked API token.</td>
+        </tr>
+        <tr>
+          <td><strong>403</strong></td>
+          <td><strong>Forbidden</strong> &mdash; Subscription inactive or insufficient privileges.</td>
+        </tr>
+        <tr>
+          <td><strong>404</strong></td>
+          <td><strong>Not Found</strong> &mdash; Entity not found.</td>
+        </tr>
+        <tr>
+          <td><strong>405</strong></td>
+          <td><strong>Method Not Allowed</strong> &mdash; Invalid method for this endpoint.</td>
+        </tr>
+        <tr>
+          <td><strong>406</strong></td>
+          <td><strong>Not Acceptable</strong> &mdash; Requested a non-JSON format.</td>
+        </tr>
+        <tr>
+          <td><strong>410</strong></td>
+          <td><strong>Gone</strong> &mdash; Entity permanently removed.</td>
+        </tr>
+        <tr>
+          <td><strong>429</strong></td>
+          <td><strong>Too Many Requests</strong> &mdash; Rate limit exceeded.</td>
+        </tr>
+        <tr>
+          <td><strong>500</strong></td>
+          <td><strong>Internal Server Error</strong> &mdash; Server problem. Try again later.</td>
+        </tr>
+        <tr>
+          <td><strong>503</strong></td>
+          <td><strong>Service Unavailable</strong> &mdash; Maintenance. Check
+            <a href="https://status.bitpaper.io">Bitpaper Status</a>.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h1 id="changelog">Changelog</h1>
+
+    <h2 id="v1-0-0">v1.0.0</h2>
+
+    <p>August 20, 2021</p>
+
+    <ul>
+      <li>Initial release</li>
+    </ul>
+  </main>
+
+  <script>
+  const esc = s => s
+    .replaceAll('&', '&amp;')
+    .replaceAll('<', '&lt;')
+    .replaceAll('>', '&gt;')
+
+  const patterns = {
+    shell: [
+      ['comment', /#[^\n]*/g],
+      ['string',  /"(?:[^"\\]|\\.)*"|'(?:[^'\\]|\\.)*'/g],
+      ['flag',    /(?<=\s)-{1,2}[\w-]+/g],
+    ],
+
+    json: [
+      ['key',     /"(?:[^"\\]|\\.)*"(?=\s*:)/g],
+      ['string',  /"(?:[^"\\]|\\.)*"/g],
+      ['number',  /-?\d+\.?\d*/g],
+      ['keyword', /\b(?:true|false|null)\b/g],
+      ['brace',   /[{}[\]]/g],
+    ],
+
+    html: [
+      ['comment', /<!--[\s\S]*?-->/g],
+      ['tag',     /<\/?[\w-]+/g],
+      ['close',   /\/?>/g],
+      ['attr',    /\s[\w-]+(?==)/g],
+      ['string',  /"[^"]*"/g],
+    ],
+  }
+
+  const isUnmarkedRange = (marks, start, end) => {
+    for (let i = start; i < end; i++) {
+      if (marks[i] !== null)
+        return false
+    }
+
+    return true
+  }
+
+  const applyRuleMarks = (code, marks, type, rx) => {
+    for (const m of code.matchAll(rx)) {
+      const start = m.index
+      const end = start + m[0].length
+
+      if (!isUnmarkedRange(marks, start, end))
+        continue
+
+      for (let i = start; i < end; i++)
+        marks[i] = type
+    }
+  }
+
+  const markTokens = (code, rules) => {
+    const marks = Array(code.length).fill(null)
+
+    for (const [type, rx] of rules)
+      applyRuleMarks(code, marks, type, rx)
+
+    return marks
+  }
+
+  const wrapTokenChunk = (type, chunk) =>
+    type ? `<span class="${type}">${chunk}</span>` : chunk
+
+  const renderTokens = (code, marks) => {
+    let result = ''
+    let i = 0
+
+    while (i < code.length) {
+      const type = marks[i]
+      let j = i
+
+      while (j < code.length && marks[j] === type)
+        j++
+
+      const chunk = esc(code.slice(i, j))
+      result += wrapTokenChunk(type, chunk)
+      i = j
+    }
+
+    return result
+  }
+
+  const tokenize = (code, lang) => {
+    const rules = patterns[lang]
+
+    if (!rules)
+      return esc(code)
+
+    const marks = markTokens(code, rules)
+    return renderTokens(code, marks)
+  }
+
+  class CodeBlock extends HTMLElement {
+    connectedCallback() {
+      const lang = this.getAttribute('lang') || ''
+      const raw = this.textContent.trim()
+      const html = tokenize(raw, lang)
+
+      this.attachShadow({ mode: 'open' })
+
+      this.shadowRoot.innerHTML = `
+        <style>
+        :host {
+          display: block;
+          margin: 1rem 0;
+        }
+
+        .wrap {
+          position: relative;
+          background: #1e1e2e;
+          border-radius: 2px;
+          border-left: 2px solid var(--accent);
+          box-shadow: 0 2px 6px rgba(0, 0, 0, .25);
+          overflow: hidden;
+        }
+
+        .lang {
+          display: inline-block;
+          padding: 0.25rem 0.75rem;
+          font-size: 0.7rem;
+          color: #6c7086;
+          font-family: system-ui, sans-serif;
+          text-transform: uppercase;
+          letter-spacing: 0.05em;
+        }
+
+        button {
+          position: absolute;
+          top: 0.4rem;
+          right: 0.5rem;
+          background: transparent;
+          border: 1px solid #45475a;
+          color: #a6adc8;
+          font: 0.7rem system-ui, sans-serif;
+          padding: 0.2rem 0.5rem;
+          border-radius: 2px;
+          cursor: pointer;
+          transition: background 0.15s, color 0.15s;
+        }
+
+        button:hover {
+          background: #313244;
+          color: #cdd6f4;
+        }
+
+        pre {
+          margin: 0;
+          padding: 0.5rem 1.5rem 1.5rem;
+          overflow-x: auto;
+          font: 0.82rem/1.6 ui-monospace, "SF Mono",
+            Menlo, Consolas, monospace;
+          color: #cdd6f4;
+        }
+
+        .comment { color: #6c7086; }
+        .string  { color: #a6e3a1; }
+        .flag    { color: #89b4fa; }
+        .key     { color: #89b4fa; }
+        .number  { color: #fab387; }
+        .keyword { color: #cba6f7; }
+        .brace   { color: #f9e2af; }
+        .tag     { color: #f38ba8; }
+        .close   { color: #f38ba8; }
+        .attr    { color: #a6e3a1; }
+        </style>
+        <div class="wrap">
+          <span class="lang">${esc(lang)}</span>
+          <button type="button">Copy</button>
+          <pre>${html}</pre>
+        </div>
+      `
+
+      const btn = this.shadowRoot.querySelector('button')
+
+      btn.addEventListener('click', () => {
+        navigator.clipboard.writeText(raw).then(() => {
+          btn.textContent = 'Copied!'
+          setTimeout(() => (btn.textContent = 'Copy'), 1500)
+        }).catch(() => {
+          btn.textContent = 'Failed'
+          setTimeout(() => (btn.textContent = 'Copy'), 1500)
+        })
+      })
+    }
+  }
+
+  customElements.define('code-block', CodeBlock)
+
+  const search = document.getElementById('toc-search')
+  const items = document.querySelectorAll('#toc > li')
+
+  search.addEventListener('input', e => {
+    const q = e.target.value.toLowerCase().trim()
+
+    for (const li of items) {
+      const text = li.textContent.toLowerCase()
+
+      li.style.display =
+        !q || text.includes(q) ? '' : 'none'
+    }
+  })
+
+  const headings = document.querySelectorAll(
+    'main h1[id], main h2[id]'
+  )
+  const tocLinks = document.querySelectorAll('#toc a')
+  const linkMap = new Map(
+    [...tocLinks].map(a => [a.getAttribute('href'), a])
+  )
+
+  const observer = new IntersectionObserver(entries => {
+    for (const entry of entries) {
+      if (!entry.isIntersecting)
+        continue
+
+      for (const a of tocLinks)
+        a.removeAttribute('aria-current')
+
+      const link = linkMap.get(`#${entry.target.id}`)
+
+      if (link)
+        link.setAttribute('aria-current', 'location')
+    }
+  }, { rootMargin: '-10% 0px -80% 0px' })
+
+  for (const h of headings)
+    observer.observe(h)
+  </script>
+</body>
+</html>
