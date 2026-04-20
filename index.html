@@ -351,6 +351,7 @@
       <li>
         <a href="#changelog">Changelog</a>
         <ul>
+          <li><a href="#v1-2-0">v1.2.0</a></li>
           <li><a href="#v1-1-0">v1.1.0</a></li>
           <li><a href="#v1-0-0">v1.0.0</a></li>
         </ul>
@@ -687,7 +688,7 @@ curl "&lt;api-endpoint-here&gt;" \
   -X POST \
   -H "Content-Type: application/json" \
   -H "Authorization: Bearer &lt;my-secret-api-token&gt;" \
-  --data '{"name":"Maths (copy)"}'</code-block>
+  --data '{"name":"Maths (copy)","tagIds":["&lt;tag-uuid-1&gt;","&lt;tag-uuid-2&gt;"]}'</code-block>
 
     <blockquote>
       <p>Returns JSON structured like this:</p>
@@ -710,6 +711,9 @@ curl "&lt;api-endpoint-here&gt;" \
     Paper</a> with the new <code>id_saved_paper</code> until
     <code>status</code> resolves to <code>active</code> or
     <code>FAILED</code>.</p>
+
+    <p>Pass <code>tagIds</code> to attach existing tags to the
+    duplicate. An unknown tag ID returns <code>404</code>.</p>
 
     <h3 id="duplicate-http-request">HTTP Request</h3>
 
@@ -741,6 +745,12 @@ curl "&lt;api-endpoint-here&gt;" \
           <td><code>name</code></td>
           <td><code>String</code> (4&ndash;64 chars)</td>
           <td>A name for the duplicate paper.</td>
+        </tr>
+        <tr>
+          <td><code>tagIds</code></td>
+          <td><code>Array&lt;String&gt;</code> (optional, UUIDs)</td>
+          <td>IDs of existing tags on your account to attach to the
+            duplicate.</td>
         </tr>
       </tbody>
     </table>
@@ -928,6 +938,15 @@ curl "&lt;api-endpoint-here&gt;" \
     </table>
 
     <h1 id="changelog">Changelog</h1>
+
+    <h2 id="v1-2-0">v1.2.0</h2>
+
+    <p>April 20, 2026</p>
+
+    <ul>
+      <li>Added optional <code>tagIds</code> parameter to
+        <a href="#duplicate-a-paper">Duplicate a Paper</a></li>
+    </ul>
 
     <h2 id="v1-1-0">v1.1.0</h2>
 
