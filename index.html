@@ -684,6 +684,12 @@ curl "&lt;api-endpoint-here&gt;" \
 
     <h2 id="duplicate-a-paper"><svg aria-hidden="true" focusable="false" width="14" height="16" viewBox="0 0 12 14" fill="currentColor"><path d="M3.5 0C2.4 0 1.5.9 1.5 2v7.5c0 1.1.9 2 2 2h5c1.1 0 2-.9 2-2V2c0-1.1-.9-2-2-2h-5zm0 1h5c.55 0 1 .45 1 1v7.5c0 .55-.45 1-1 1h-5c-.55 0-1-.45-1-1V2c0-.55.45-1 1-1zM0 3.5V12c0 1.1.9 2 2 2h5.5v-1H2c-.55 0-1-.45-1-1V3.5H0z"/></svg> Duplicate a Paper</h2>
 
+    <aside data-warn>
+      Duplication is a task submission, not a synchronous create.
+      The new paper is not usable until its <code>status</code>
+      resolves to <code>active</code>.
+    </aside>
+
     <code-block lang="shell">curl "https://api.bitpaper.io/public/api/v1/paper/ddc95912-2a81-a25e-b589-8de1d472f6e8/copy" \
   -X POST \
   -H "Content-Type: application/json" \
@@ -711,6 +717,10 @@ curl "&lt;api-endpoint-here&gt;" \
     Paper</a> with the new <code>id_saved_paper</code> until
     <code>status</code> resolves to <code>active</code> or
     <code>FAILED</code>.</p>
+
+    <p>To avoid rate limiting, use exponential backoff between
+    polls. Start at a 2-second interval, double after each
+    attempt, and cap at 30 seconds.</p>
 
     <p>Pass <code>tagIds</code> to attach existing tags to the
     duplicate. An unknown tag ID returns <code>404</code>.</p>
@@ -792,7 +802,8 @@ curl "&lt;api-endpoint-here&gt;" \
 
     <aside>
       Recommended polling interval is 2&ndash;5 seconds. The copy
-      duration depends on paper size.
+      duration depends on paper size; treat any duplicate still
+      <code>INFLIGHT</code> after 120 seconds as failed.
     </aside>
 
     <h2 id="delete-a-paper"><svg aria-hidden="true" focusable="false" width="14" height="14" viewBox="0 0 9.37049 10.957" fill="currentColor"><path d="M3.05039 8.72063C3.20965 8.72063 3.30949 8.62119 3.30545 8.4777L3.15797 3.48047C3.15393 3.33293 3.04863 3.24117 2.90291 3.24117C2.74951 3.24117 2.64381 3.33697 2.64785 3.4841L2.79533 8.47951C2.79938 8.62705 2.90104 8.72063 3.05039 8.72063ZM4.41662 8.72063C4.57406 8.72063 4.67977 8.62301 4.67977 8.4777L4.67977 3.4841C4.67977 3.33879 4.57406 3.24117 4.41662 3.24117C4.261 3.24117 4.15348 3.33879 4.15348 3.4841L4.15348 8.4777C4.15348 8.62301 4.261 8.72063 4.41662 8.72063ZM5.78508 8.72426C5.93221 8.72426 6.03791 8.62887 6.04195 8.48133L6.18539 3.48592C6.18943 3.33879 6.08596 3.24299 5.93033 3.24299C5.78279 3.24299 5.6775 3.33879 5.67346 3.48229L5.53002 8.47951C5.52598 8.62301 5.62764 8.72426 5.78508 8.72426ZM2.42982 2.04586L3.07295 2.04586L3.07295 1.07057C3.07295 0.784923 3.26649 0.60674 3.56707 0.60674L5.26031 0.60674C5.55867 0.60674 5.75221 0.784923 5.75221 1.07057L5.75221 2.04586L6.39938 2.04586L6.39938 1.03014C6.39938 0.391407 5.98272 0 5.29711 0L3.52623 0C2.84648 0 2.42982 0.391407 2.42982 1.03014ZM0.303165 2.36742L8.53008 2.36742C8.69965 2.36742 8.83143 2.22979 8.83143 2.06203C8.83143 1.89065 8.69379 1.75664 8.53008 1.75664L0.303165 1.75664C0.143496 1.75664 0 1.89246 0 2.06203C0 2.2316 0.143496 2.36742 0.303165 2.36742ZM2.32682 10.1706L6.51047 10.1706C7.13326 10.1706 7.56809 9.75516 7.59961 9.13195L7.92973 2.2868L7.27711 2.2868L6.95689 9.06586C6.94336 9.35133 6.73307 9.5598 6.44801 9.5598L2.37756 9.5598C2.1024 9.5598 1.88807 9.34728 1.87453 9.06586L1.54037 2.28861L0.903515 2.28861L1.23949 9.136C1.27102 9.7592 1.69594 10.1706 2.32682 10.1706Z"/></svg> Delete a Paper</h2>
